@@ -4,8 +4,18 @@
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
-    "patch-release": "npm version patch && npm publish && git push --follow-tags"
+    "npm-release": "npm version patch && npm publish"
   },
   "author": "Phil Willis <pdotwdot@gmail.com> (http://www.philwillis.pw/)",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=6"
+  },
+  "bin": {
+    "appseed-scripts": "bin/appseed-scripts.js"
+  },
+  "dev": {
+    "chalk": "2.3.0",
+    "react-dev-utils": "4.1.0"
+  }
 }
