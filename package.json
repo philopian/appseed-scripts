@@ -14,7 +14,7 @@
   "bin": {
     "appseed-scripts": "bin/appseed-scripts.js"
   },
-  "dev": {
+  "dependencies": {
     "chalk": "2.3.0",
     "react-dev-utils": "4.1.0"
   }
