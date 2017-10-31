@@ -7,16 +7,17 @@ const spawn = require("react-dev-utils/crossSpawn");
 const args = process.argv.slice(2);
 
 const scriptIndex = args.findIndex(
-  x => x === "build" || x === "start" || x === "test" || x === "new"
+  x => x === "dev" || x === "start" || x === "test" || x === "build" || x === "new"
 );
 const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
 switch (script) {
-  case "build":
+  case "dev":
   case "start":
-  case "new":
   case "test":
+  case "build":
+  case "new":
     {
       const result = spawn.sync(
         "node",
