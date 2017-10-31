@@ -4,7 +4,7 @@
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
-    "npm-release": "npm version patch && npm publish && git push"
+    "npm-release": "npm version patch && npm publish && git push origin master"
   },
   "author": "Phil Willis <pdotwdot@gmail.com> (http://www.philwillis.pw/)",
   "license": "ISC",
