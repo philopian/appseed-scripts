@@ -1,30 +1,31 @@
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = "production";
 const fs = require("fs");
 const path = require("path");
 const argv = process.argv.slice(2);
 const chalk = require("chalk");
-const rimraf = require('rimraf');
+const rimraf = require("rimraf");
 const _ = require("lodash");
 
 const appDirectory = fs.realpathSync(process.cwd());
-const config = require(path.join(appDirectory, 'appseed.config.js'));
+const config = require(path.join(appDirectory, "appseed.config.js"));
 console.log(
-  '',
-  chalk.bgCyan('Command:'),
-  ' $ appseed build\n',
-  chalk.bgCyan('Application Root:'),
+  "",
+  chalk.bgCyan("Command:"),
+  " $ appseed build\n",
+  chalk.bgCyan("Application Root:"),
   ` ${appDirectory}\n`,
-  chalk.bgCyan('Argument:'),
+  chalk.bgCyan("Argument:"),
   ` ${argv}\n`
 );
 
-const bowerTags = require('../tools/bower-tags');
-const buildCmd = require('../tools/build-cmd');
+const bowerTags = require("../tools/bower-tags");
+const buildCmd = require("../tools/build-cmd");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Generate frontend files
 const deployFolder = config.paths.deployRoot;
-buildCmd.makeFolderIfDoesntExist(deployFolder)
+buildCmd
+  .makeFolderIfDoesntExist(deployFolder)
   .then(() => {
     // Make the ./DEPLOY/www/ folder
     const wwwFolder = config.paths.deployWwwRoot;
@@ -32,7 +33,7 @@ buildCmd.makeFolderIfDoesntExist(deployFolder)
   })
   .then(() => {
     // Make the ./DEPLOY/www/code/ folder
-    const wwwCodeFolder = path.join(config.paths.deployWwwRoot, 'code');
+    const wwwCodeFolder = path.join(config.paths.deployWwwRoot, "code");
     return buildCmd.makeFolderIfDoesntExist(wwwCodeFolder);
   })
   .then(() => {
@@ -45,7 +46,10 @@ buildCmd.makeFolderIfDoesntExist(deployFolder)
   })
   .then(() => {
     // Build bower vendor files
-    const outCssFile = path.join(config.paths.deployWwwRoot, 'code/vendor.min.css');
+    const outCssFile = path.join(
+      config.paths.deployWwwRoot,
+      "code/vendor.min.css"
+    );
     return bowerTags.concatBowerFiles(appDirectory, outCssFile);
   })
   .then(() => {
@@ -66,11 +70,12 @@ buildCmd.makeFolderIfDoesntExist(deployFolder)
   })
   .then(() => {
     // User provided the "azure" argument
-    if (_.includes(argv, 'azure')) {
-      console.log(chalk.blue('Building Azure deploy version'));
+    if (_.includes(argv, "azure")) {
+      console.log(chalk.blue("Building Azure deploy version"));
 
       // Create prod package.json
-      buildCmd.copyPackageJson(config)
+      buildCmd
+        .copyPackageJson(config)
         .then(() => {
           // Create server files
           return buildCmd.copyServerFiles(config);
@@ -90,27 +95,20 @@ buildCmd.makeFolderIfDoesntExist(deployFolder)
         .then(() => {
           // DONE!
           console.log(
-            '\n\n\n',
-            '******************************************************************************\n',
-            '\n',
-            '      Production build is complete! \n',
-            '      To run your application locally follow these commands:',
-            '      $ cd ' + config.fileNames.distRoot + ' \n',
-            '      $ node server \n',
-            '\n',
-            '      You can now view your website at http://localhost:' + config.port + '\n',
-            '\n',
-            '*************************************************************************\n\n\n'
+            "\n\n\n",
+            "******************************************************************************\n",
+            "\n",
+            "      Production build is complete! \n",
+            "      To run your application locally follow these commands:\n",
+            "      $ cd " + config.fileNames.distRoot + " \n",
+            "      $ node server \n",
+            "\n",
+            "      You can now view your website at http://localhost:" +
+            config.port +
+            "\n",
+            "\n",
+            "*************************************************************************\n\n\n"
           );
         });
-
     }
-
-
-
-
-
-
-
-
   });
