@@ -1,5 +1,4 @@
 module.exports = {
-
   webConfig: () => {
     return `<?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -27,6 +26,4 @@ module.exports = {
  </configuration>
 `;
   }
-
-
-}
+};
