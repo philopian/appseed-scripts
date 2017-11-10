@@ -2,16 +2,15 @@ const fs = require("fs");
 const fsExtra = require("node-fs-extra");
 const path = require("path");
 const chalk = require("chalk");
-const shell = require('shelljs');
-const rimraf = require('rimraf');
-const ora = require('ora');
-const webpack = require('webpack');
-const webpackConfig = require('../config/webpack.config.prod');
-const templates = require('./templates');
+const shell = require("shelljs");
+const rimraf = require("rimraf");
+const ora = require("ora");
+const webpack = require("webpack");
+const webpackConfig = require("../config/webpack.config.prod");
+const templates = require("./templates");
 
 module.exports = {
-
-  makeFolderIfDoesntExist: (folderName) => {
+  makeFolderIfDoesntExist: folderName => {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(folderName)) {
         rimraf(folderName, () => {
@@ -25,9 +24,11 @@ module.exports = {
     });
   },
 
-  buildWebpack: (config) => {
+  buildWebpack: config => {
     return new Promise((resolve, reject) => {
-      var spinner = ora(chalk.blue('Generating minified bundle for production.')).start();
+      var spinner = ora(
+        chalk.blue("Generating minified bundle for production.")
+      ).start();
       webpack(webpackConfig).run((err, stats) => {
         spinner.stop();
         if (err) {
@@ -41,158 +42,190 @@ module.exports = {
         }
 
         if (jsonStats.hasWarnings) {
-          console.log(chalk.yellow('Webpack generated the following warnings: '));
+          console.log(
+            chalk.yellow("Webpack generated the following warnings: ")
+          );
           jsonStats.warnings.map(warning => console.log(chalk.yellow(warning)));
         }
 
         console.log(`Webpack stats: ${stats}`);
-        console.log(chalk.blue(`Your app has been built for production and written to ./${config.fileNames.distRoot}`));
+        console.log(
+          chalk.blue(
+            `Your app has been built for production and written to ./${config
+              .fileNames.distRoot}`
+          )
+        );
         // return 0;
         resolve();
       });
     });
   },
 
-  copyFonts: (config) => {
+  copyFonts: config => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * FontAwesome
        *********************************************/
-      const fontAwesomeDir = path.join(config.paths.bower, 'font-awesome/fonts');
-      const fontAwesomeBuildDir = path.join(config.paths.deployWwwRoot, 'fonts');
+      const fontAwesomeDir = path.join(
+        config.paths.bower,
+        "font-awesome/fonts"
+      );
+      const fontAwesomeBuildDir = path.join(
+        config.paths.deployWwwRoot,
+        "fonts"
+      );
 
-      if (fs.existsSync(path.join(fontAwesomeDir, 'fontawesome-webfont.ttf'))) {
+      if (fs.existsSync(path.join(fontAwesomeDir, "fontawesome-webfont.ttf"))) {
         fsExtra.copy(fontAwesomeDir, fontAwesomeBuildDir, err => {
-          if (err) return console.error(err)
-          console.log(chalk.blue('FontAwesome fonts copied to DEPLOY'));
+          if (err) return console.error(err);
+          console.log(chalk.blue("FontAwesome fonts copied to DEPLOY"));
           resolve();
         });
       }
     });
   },
 
-  copyLeafletImages: (config) => {
+  copyLeafletImages: config => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Leaflet
        *********************************************/
-      const leafletAssets = path.join(config.paths.bower, 'leaflet/dist/images');
-      const leafletAssetsDist = path.join(config.paths.deployWwwRoot, 'code/images');
-      if (fs.existsSync(path.join(leafletAssets, 'marker-icon.png'))) {
+      const leafletAssets = path.join(
+        config.paths.bower,
+        "leaflet/dist/images"
+      );
+      const leafletAssetsDist = path.join(
+        config.paths.deployWwwRoot,
+        "code/images"
+      );
+      if (fs.existsSync(path.join(leafletAssets, "marker-icon.png"))) {
         fsExtra.copy(leafletAssets, leafletAssetsDist, err => {
-          if (err) return console.error(err)
-          console.log(chalk.blue('Leaflet assets copied to DEPLOY'));
+          if (err) return console.error(err);
+          console.log(chalk.blue("Leaflet assets copied to DEPLOY"));
           resolve();
         });
       }
     });
   },
 
-  copyAssets: (config) => {
+  copyAssets: config => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy the Assets folder
        *********************************************/
-      var sourceAssets = path.join(config.paths.webRoot, 'assets');
-      var destinationAssets = path.join(config.paths.deployWwwRoot, 'assets');
+      var sourceAssets = path.join(config.paths.webRoot, "assets");
+      var destinationAssets = path.join(config.paths.deployWwwRoot, "assets");
       fsExtra.copy(sourceAssets, destinationAssets, function(err) {
         if (err) {
           console.error(err);
         } else {
-          console.log(chalk.blue('Assets files have been copied to the dist folder!'));
+          console.log(
+            chalk.blue("Assets files have been copied to the dist folder!")
+          );
           resolve();
         }
       });
     });
   },
 
-
-
-  copyAppseedConfig: (config) => {
+  copyAppseedConfig: (config, folderName) => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy appseed.config.js
        *********************************************/
-      var sourceAppSeedconfig = path.join(config.paths.appRoot, 'appseed.config.js');
-      var destinationAppSeedconfig = path.join(config.paths.deployRoot, 'appseed.config.js');
+      var sourceAppSeedconfig = path.join(
+        config.paths.appRoot,
+        "appseed.config.js"
+      );
+      var destinationAppSeedconfig = path.join(
+        config.paths.deployRoot,
+        folderName,
+        "appseed.config.js"
+      );
       if (fs.existsSync(sourceAppSeedconfig)) {
         fsExtra.copy(sourceAppSeedconfig, destinationAppSeedconfig, err => {
-          if (err) return console.error(err)
-          console.log(chalk.blue('appseed.config.js has been copied'));
+          if (err) return console.error(err);
+          console.log(chalk.blue("appseed.config.js has been copied"));
           resolve();
         });
       }
     });
   },
 
-
-
-  createDotEnv: (config) => {
+  createDotEnv: (config, folderName) => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Create .env file
        *********************************************/
-      const dotEnvFile = path.join(config.paths.deployRoot, '.env');
+      const dotEnvFile = path.join(config.paths.deployRoot, folderName, ".env");
       const dotEnvContents = `NODE_ENV=production
 PORT=8080
       `;
-      fs.writeFile(dotEnvFile, dotEnvContents, 'utf8', (err) => {
-        if (err) return console.error(err)
-        console.log(chalk.blue('Created .env file'));
+      fs.writeFile(dotEnvFile, dotEnvContents, "utf8", err => {
+        if (err) return console.error(err);
+        console.log(chalk.blue("Created .env file"));
         resolve();
       });
     });
   },
 
-
-
-  createWebConfig: (config) => {
+  createWebConfig: config => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Create web.config file
        *********************************************/
-      const webConfigFileName = path.join(config.paths.deployRoot, 'web.config');
+      const webConfigFileName = path.join(
+        config.paths.deployRoot,
+        "web.config"
+      );
       const webConfigContents = templates.webConfig();
-      fs.writeFile(webConfigFileName, webConfigContents, 'utf8', function(err) {
+      fs.writeFile(webConfigFileName, webConfigContents, "utf8", function(err) {
         if (err) {
           return console.log(err);
         }
-        console.log(chalk.blue('Created web.config file'));
+        console.log(chalk.blue("Created web.config file"));
         resolve();
       });
     });
   },
 
-
-  copyServerFiles: (config) => {
+  copyServerFiles: (config, folderName) => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy the server files
        *********************************************/
-      var sourceServer = path.join(config.paths.appRoot, 'server');
-      var destinationServer = path.join(config.paths.deployRoot, 'server');
+      var sourceServer = path.join(config.paths.appRoot, "server");
+      var destinationServer = path.join(
+        config.paths.deployRoot,
+        folderName,
+        "server"
+      );
       if (fs.existsSync(sourceServer)) {
         fsExtra.copy(sourceServer, destinationServer, err => {
-          if (err) return console.error(err)
-          console.log(chalk.blue('Copied the server files to production folder'));
+          if (err) return console.error(err);
+          console.log(
+            chalk.blue("Copied the server files to production folder")
+          );
           resolve();
         });
       }
     });
   },
 
-
-
-  copyPackageJson: (config) => {
+  copyPackageJson: (config, folderName) => {
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy the server files
        *********************************************/
       // Copy the package.json and remove all the devDependencies
-      const packageJsonFileIn = path.join(config.paths.appRoot, 'package.json');
-      const packageJsonFileOut = path.join(config.paths.deployRoot, 'package.json');
-      fs.readFile(packageJsonFileIn, 'utf8', (err, packageJson) => {
-        if (err) return console.error(err)
+      const packageJsonFileIn = path.join(config.paths.appRoot, "package.json");
+      const packageJsonFileOut = path.join(
+        config.paths.deployRoot,
+        folderName,
+        "package.json"
+      );
+      fs.readFile(packageJsonFileIn, "utf8", (err, packageJson) => {
+        if (err) return console.error(err);
 
         // Cleanup the devDependencies
         const regexRemoveDevDependencies = /,\n  "devDependencies": {([\s\S]*?)}/g;
@@ -212,23 +245,42 @@ PORT=8080
         packageJson = packageJson.replace(regexRemoveAuthor, "");
 
         // Write changes to index.html file
-        fs.writeFile(packageJsonFileOut, packageJson, 'utf8', (err) => {
-          if (err) return console.error(err)
-          console.log(chalk.blue('Copied the package.json files to production folder'));
+        fs.writeFile(packageJsonFileOut, packageJson, "utf8", err => {
+          if (err) return console.error(err);
+          console.log(
+            chalk.blue("Copied the package.json files to production folder")
+          );
           resolve();
         });
       });
-
-
-
-
-
     });
+  },
 
+  createAnsibleFiles: config => {
+    return new Promise((resolve, reject) => {
+      // Generate Ansible files
+      const source = path.join(
+        __dirname,
+        "../templates-folders/docker/ansible"
+      );
+      const destination = path.join(config.paths.deployRoot, "ansible");
+      fsExtra.copy(source, destination, err => {
+        if (err) return console.error(err);
+        console.log(chalk.blue("Ansible files created in ./DEPLOY"));
+        resolve();
+      });
+    });
+  },
+
+  createNginxFiles: () => {
+    // Generate Nginx files
+  },
+
+  createDockerFiles: () => {
+    // Generate Docker files
+  },
+
+  createRunBashCommands: () => {
+    // Generate ./up.sh & ./down.sh files
   }
-
-
-
-
-
-}
+};
