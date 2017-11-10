@@ -1,5 +1,5 @@
 node_modules
 .vscode
-ignore_me
+__IGNORE-ME__
 .prettierignore
 yarn.lock
