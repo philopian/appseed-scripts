@@ -69,10 +69,10 @@ function BuildDocker(config) {
   console.log(chalk.blue("Building Docker deploy version"));
 
   // Create prod package.json
-  const packageJsonOutPath = path.join(config.paths.deployRoot, "nodejs");
+  const nodejsPath = path.join(config.paths.deployRoot, "nodejs");
   buildCmd
   // Make the ./DEPLOY/nodejs/ folder
-    .makeFolderIfDoesntExist(packageJsonOutPath)
+    .makeFolderIfDoesntExist(nodejsPath)
     .then(() => {
       // Copy & clean the packageJson file
       return buildCmd.copyPackageJson(config, "nodejs");
@@ -80,10 +80,6 @@ function BuildDocker(config) {
     .then(() => {
       // Copy the server files to ./DEPLOY/nodejs/server/
       return buildCmd.copyServerFiles(config, "nodejs");
-    })
-    .then(() => {
-      // TODO: create dockerfile for nodejs from template
-      return;
     })
     .then(() => {
       // Copy appseed.config.js file
@@ -94,23 +90,24 @@ function BuildDocker(config) {
       return buildCmd.createDotEnv(config, "nodejs");
     })
     .then(() => {
-      // TODO: Copy the ./templates-folders/docker/ansible to ./DEPLOY/ansible
+      // Copy the ./templates-folders/docker/ansible to ./DEPLOY/ansible
       return buildCmd.createAnsibleFiles(config);
     })
     .then(() => {
       // TODO: Copy the ./templates-folders/docker/nginx to ./DEPLOY/nginx
-      return;
+      return buildCmd.createNginxFiles(config);
     })
     .then(() => {
-      // TODO: Copy the ./templates-folders/docker/nodejs to ./DEPLOY/nodejs
-      return;
+      // Create Dockerfile
+      return buildCmd.createDockerFiles(config);
     })
     .then(() => {
-      // Copy the docker-copose files and scripts
-      // TODO: Copy the ./templates-folders/docker/up.sh to ./DEPLOY/up.sh
-      // TODO: Copy the ./templates-folders/docker/down.sh to ./DEPLOY/down.sh
-      // TODO: Copy the ./templates-folders/docker/README.sh to ./DEPLOY/README.sh
-      return;
+      // TODO: Copy the ./templates-folders/docker/nginx to ./DEPLOY/nginx
+      return buildCmd.copyTemplateFiles(config);
+    })
+    .then(() => {
+      // Copy the ./www/ to ./nginx/www/
+      return buildCmd.copyWwwToNginx(config);
     })
     .then(() => {
       // DONE!
@@ -123,9 +120,7 @@ function BuildDocker(config) {
         "      $ cd " + config.fileNames.distRoot + " \n",
         "      $ ./up.sh \n",
         "\n",
-        "      You can now view your website at http://localhost:" +
-        config.port +
-        "\n",
+        "      You can now view your website at http://localhost:80" + "\n",
         "\n",
         "*************************************************************************\n\n\n"
       );
@@ -141,51 +136,54 @@ buildCmd
     const wwwFolder = config.paths.deployWwwRoot;
     return buildCmd.makeFolderIfDoesntExist(wwwFolder);
   })
-  // .then(() => {
-  //   // Make the ./DEPLOY/www/code/ folder
-  //   const wwwCodeFolder = path.join(config.paths.deployWwwRoot, "code");
-  //   return buildCmd.makeFolderIfDoesntExist(wwwCodeFolder);
-  // })
-  // .then(() => {
-  //   // Cleanup bower tags from ./www/index.html file
-  //   return bowerTags.addVendorCssTag(appDirectory);
-  // })
-  // .then(() => {
-  //   // Webpack build production version
-  //   return buildCmd.buildWebpack(config);
-  // })
-  // .then(() => {
-  //   // Build bower vendor files
-  //   const outCssFile = path.join(
-  //     config.paths.deployWwwRoot,
-  //     "code/vendor.min.css"
-  //   );
-  //   return bowerTags.concatBowerFiles(appDirectory, outCssFile);
-  // })
-  // .then(() => {
-  //   // Clean up all the tags in the index.html
-  //   return bowerTags.defaultTags(appDirectory);
-  // })
-  // .then(() => {
-  //   // Copy Fonts
-  //   return buildCmd.copyFonts(config);
-  // })
-  // .then(() => {
-  //   // Copy Leaflet Images
-  //   return buildCmd.copyLeafletImages(config);
-  // })
-  // .then(() => {
-  //   // Copy Assets
-  //   return buildCmd.copyAssets(config);
-  // })
+  .then(() => {
+    // Make the ./DEPLOY/www/code/ folder
+    const wwwCodeFolder = path.join(config.paths.deployWwwRoot, "code");
+    return buildCmd.makeFolderIfDoesntExist(wwwCodeFolder);
+  })
+  .then(() => {
+    // Cleanup bower tags from ./www/index.html file
+    return bowerTags.addVendorCssTag(appDirectory);
+  })
+  .then(() => {
+    // Webpack build production version
+    return buildCmd.buildWebpack(config);
+  })
+  .then(() => {
+    // Build bower vendor files
+    const outCssFile = path.join(
+      config.paths.deployWwwRoot,
+      "code/vendor.min.css"
+    );
+    return bowerTags.concatBowerFiles(appDirectory, outCssFile);
+  })
+  .then(() => {
+    // Clean up all the tags in the index.html
+    return bowerTags.defaultTags(appDirectory);
+  })
+  .then(() => {
+    // Copy Fonts
+    return buildCmd.copyFonts(config);
+  })
+  .then(() => {
+    // Copy Leaflet Images
+    return buildCmd.copyLeafletImages(config);
+  })
+  .then(() => {
+    // Copy Assets
+    return buildCmd.copyAssets(config);
+  })
   .then(() => {
     // User provided the "azure" argument
-    if (_.includes(argv, "azure")) {
+    if (_.includes(argv, "--azure")) {
       BuildAzure(config);
     }
 
     // User provided the "docker" argument
-    if (_.includes(argv, "docker")) {
+    if (_.includes(argv, "--docker")) {
       BuildDocker(config);
     }
+  })
+  .catch(function(e) {
+    console.log(e); // "oh, no!"
   });

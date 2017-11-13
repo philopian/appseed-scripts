@@ -26,6 +26,7 @@
     "babel-preset-jest": "^21.2.0",
     "babel-preset-react": "^6.24.1",
     "chalk": "2.3.0",
+    "chmod": "^0.2.1",
     "chokidar": "^1.7.0",
     "concat-files": "^0.1.1",
     "css-loader": "^0.28.7",

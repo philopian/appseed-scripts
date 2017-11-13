@@ -8,6 +8,7 @@ const ora = require("ora");
 const webpack = require("webpack");
 const webpackConfig = require("../config/webpack.config.prod");
 const templates = require("./templates");
+const chmod = require("chmod");
 
 module.exports = {
   makeFolderIfDoesntExist: folderName => {
@@ -104,6 +105,8 @@ module.exports = {
           console.log(chalk.blue("Leaflet assets copied to DEPLOY"));
           resolve();
         });
+      } else {
+        resolve();
       }
     });
   },
@@ -272,15 +275,89 @@ PORT=8080
     });
   },
 
-  createNginxFiles: () => {
-    // Generate Nginx files
+  createNginxFiles: config => {
+    return new Promise((resolve, reject) => {
+      // Generate Nginx files
+      const source = path.join(__dirname, "../templates-folders/docker/nginx");
+      const destination = path.join(config.paths.deployRoot, "nginx");
+      fsExtra.copy(source, destination, err => {
+        if (err) return console.error(err);
+        console.log(chalk.blue("Nginx files created in ./DEPLOY"));
+        resolve();
+      });
+    });
   },
 
-  createDockerFiles: () => {
-    // Generate Docker files
+  createDockerFiles: config => {
+    // Generate Dockerfile files
+    return new Promise((resolve, reject) => {
+      // Generate Nginx Dockerfile
+      const dockerfileNginxFilename = path.join(
+        config.paths.deployRoot,
+        "nginx",
+        "Dockerfile"
+      );
+      const dockerfileNginxContents = templates.dockerfileNginx();
+      fs.writeFileSync(
+        dockerfileNginxFilename,
+        dockerfileNginxContents,
+        "utf-8"
+      );
+
+      // Generate Nginx Dockerfile
+      const dockerfileNodejsFilename = path.join(
+        config.paths.deployRoot,
+        "nodejs",
+        "Dockerfile"
+      );
+      const dockerfileNodejsContents = templates.dockerfileNodejs();
+      fs.writeFileSync(
+        dockerfileNodejsFilename,
+        dockerfileNodejsContents,
+        "utf-8"
+      );
+
+      resolve();
+    });
   },
 
-  createRunBashCommands: () => {
-    // Generate ./up.sh & ./down.sh files
+  copyTemplateFiles: config => {
+    // Copy ./up.sh & ./down.sh files
+    return new Promise((resolve, reject) => {
+      fsExtra.copySync(
+        path.join(__dirname, "../templates-folders/docker/up.sh"),
+        path.join(config.paths.deployRoot, "up.sh")
+      );
+      fsExtra.copySync(
+        path.join(__dirname, "../templates-folders/docker/down.sh"),
+        path.join(config.paths.deployRoot, "down.sh")
+      );
+      fsExtra.copySync(
+        path.join(__dirname, "../templates-folders/docker/README.md"),
+        path.join(config.paths.deployRoot, "README.md")
+      );
+      fsExtra.copySync(
+        path.join(__dirname, "../templates-folders/docker/docker-compose.yml"),
+        path.join(config.paths.deployRoot, "docker-compose.yml")
+      );
+
+      chmod(path.join(config.paths.deployRoot, "up.sh"), 751);
+      chmod(path.join(config.paths.deployRoot, "down.sh"), 751);
+
+      resolve();
+    });
+  },
+
+  copyWwwToNginx: config => {
+    return new Promise((resolve, reject) => {
+      // Copy ./www/ to Nginx/www/ files
+      const source = path.join(config.paths.deployRoot, "www");
+      const destination = path.join(config.paths.deployRoot, "nginx", "www");
+      fsExtra.copy(source, destination, err => {
+        if (err) return console.error(err);
+        console.log(chalk.blue("WWW files copied to ./nginx/www"));
+        resolve();
+      });
+    });
   }
 };
