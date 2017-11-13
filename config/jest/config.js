@@ -4,12 +4,14 @@ module.exports = {
   testEnvironment: "node",
   testMatch: [
     "<rootDir>/www/**/__tests__/**/*.js?(x)",
-    "<rootDir>/www/**/?(*.)(spec|test).js?(x)"
+    "<rootDir>/www/**/?(*.)(spec|test).js?(x)",
+    "<rootDir>/server/**/__tests__/**/*.js?(x)",
+    "<rootDir>/server/**/?(*.)(spec|test).js?(x)"
   ],
   collectCoverageFrom: ["www/**/*.{js,jsx}"],
   moduleNameMapper: { "^react-native$": "react-native-web" },
   moduleFileExtensions: ["web.js", "js", "json", "web.jsx", "jsx", "node"],
-  "transform": {
+  transform: {
     "^.+\\.(js|jsx)$": path.join(__dirname, "/preprocessor.js")
   }
 };

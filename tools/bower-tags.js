@@ -174,8 +174,7 @@ const defaultTags = appDir => {
     // Regex
     var regexBowerTags = /<!-- bower:css -->([\s\S]*?)<!-- endinject -->/g;
     var cleanBowerTags = `<!-- bower:css -->
-    <!-- endinject -->
-    `;
+    <!-- endinject -->`;
     var regexBundleCss = /<!-- bundle:css -->([\s\S]*?)<!-- endinject -->/g;
     const vendorCssTag = `<!-- bundle:css -->
     <!-- endinject -->`;
