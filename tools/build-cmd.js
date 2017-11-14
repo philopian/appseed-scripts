@@ -10,6 +10,15 @@ const webpackConfig = require("../config/webpack.config.prod");
 const templates = require("./templates");
 const chmod = require("chmod");
 
+
+function checkIfUndefined(item) {
+  if (item == undefined) {
+    return ''
+  } else {
+    return item
+  }
+}
+
 module.exports = {
   makeFolderIfDoesntExist: folderName => {
     return new Promise((resolve, reject) => {
@@ -132,6 +141,7 @@ module.exports = {
   },
 
   copyAppseedConfig: (config, folderName) => {
+    folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy appseed.config.js
@@ -156,6 +166,7 @@ module.exports = {
   },
 
   createDotEnv: (config, folderName) => {
+    folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
        * Create .env file
@@ -193,6 +204,7 @@ PORT=8080
   },
 
   copyServerFiles: (config, folderName) => {
+    folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy the server files
@@ -216,6 +228,7 @@ PORT=8080
   },
 
   copyPackageJson: (config, folderName) => {
+    folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
        * Copy the server files
