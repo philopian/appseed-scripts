@@ -33,6 +33,18 @@ module.exports = {
     });
   },
 
+  createFileFromTemplate: (filename, templateStr) => {
+    return new Promise((resolve, reject) => {
+      fs.writeFileSync(
+        filename,
+        templateStr,
+        "utf-8"
+      );
+      resolve();
+    })
+  },
+
+
   buildWebpack: (config, buildType) => {
     buildType = checkIfUndefined(buildType);
     return new Promise((resolve, reject) => {
@@ -73,7 +85,6 @@ module.exports = {
               .fileNames.distRoot}`
           )
         );
-        // return 0;
         resolve();
       });
     });

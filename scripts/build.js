@@ -20,6 +20,7 @@ console.log(
 
 const bowerTags = require("../tools/bower-tags");
 const buildCmd = require("../tools/build-cmd");
+const templates = require("../tools/templates");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //-- Functions-----
@@ -146,10 +147,32 @@ buildCmd
     return bowerTags.addVendorCssTag(appDirectory);
   })
   .then(() => {
-    // Webpack build production version
-    return buildCmd.buildWebpack(config);
+    // User provided the "dojo" argument
+    if (_.includes(argv, "--dojo")) {
+      // Webpack DOJO build production version
+      return buildCmd.buildWebpack(config, "dojo");
+    } else {
+      // Webpack DEFAULT build production version
+      return buildCmd.buildWebpack(config);
+    }
   })
-  .then(() => {
+
+.then(() => {
+  // User provided the "dojo" argument
+  if (_.includes(argv, "--dojo")) {
+    // Create dojoConfig file in the prod folder
+    const dojoConfigFilename = path.join(config.paths.deployWwwRoot, 'dojoConfig.js');
+    return buildCmd.createFileFromTemplate(dojoConfigFilename, templates.dojoProdConfig());
+  } else {
+    // Next
+    return;
+  }
+})
+
+
+
+
+.then(() => {
     // Build bower vendor files
     const outCssFile = path.join(
       config.paths.deployWwwRoot,

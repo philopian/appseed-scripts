@@ -139,7 +139,7 @@ const addVendorCssTag = appDir => {
     var cleanBowerTags = `<!-- bower:css -->
     <!-- endinject -->`;
     var regexBundleCss = /<!-- bundle:css -->([\s\S]*?)<!-- endinject -->/g;
-    const vendorCssTag = `    <!-- bundle:css -->
+    const vendorCssTag = `<!-- bundle:css -->
     <link rel="stylesheet" type="" href="code/vendor.min.css">
     <link rel="stylesheet" href="code/app.css">
     <!-- endinject -->`;

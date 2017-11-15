@@ -87,5 +87,20 @@ services:
 networks:
   appseed-network:
     driver: bridge`;
+  },
+
+
+  dojoProdConfig: () => {
+    return `window.dojoConfig = {
+  async: true,
+  deps: ["app/bundle"],
+  packages: [{
+    name: "app",
+    location: location.origin + '/code',
+    main: "bundle"
+  }]
+};`
   }
+
+
 };

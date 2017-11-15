@@ -9,7 +9,7 @@ module.exports = {
   target: "web",
   devtool: "cheap-module-eval-source-map",
   plugins: [
-    // new webpack.NamedModulesPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
