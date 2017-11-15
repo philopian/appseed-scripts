@@ -6,7 +6,6 @@ const shell = require("shelljs");
 const rimraf = require("rimraf");
 const ora = require("ora");
 const webpack = require("webpack");
-const webpackConfig = require("../config/webpack.config.prod");
 const templates = require("./templates");
 const chmod = require("chmod");
 
@@ -34,11 +33,20 @@ module.exports = {
     });
   },
 
-  buildWebpack: config => {
+  buildWebpack: (config, buildType) => {
+    buildType = checkIfUndefined(buildType);
     return new Promise((resolve, reject) => {
       var spinner = ora(
         chalk.blue("Generating minified bundle for production.")
       ).start();
+
+      // Check to see if use passed in the dojo flag
+      let webpackConfig;
+      if (buildType == 'dojo') {
+        webpackConfig = require("../config/webpack.config.proddojo");
+      } else {
+        webpackConfig = require("../config/webpack.config.prod");
+      }
       webpack(webpackConfig).run((err, stats) => {
         spinner.stop();
         if (err) {
