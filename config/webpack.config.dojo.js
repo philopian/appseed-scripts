@@ -18,6 +18,7 @@ module.exports = {
     })
   ],
   resolve: {
+    extensions: ['.js', '.jsx'],
     modules: ["node_modules", "bower_components"],
     descriptionFiles: ["package.json", "bower.json"],
     alias: {
@@ -42,15 +43,24 @@ module.exports = {
 
   // LOADERS
   module: {
-    rules: [
-      { test: /\.html$/, use: [{ loader: require.resolve("html-loader"), options: { minimize: true } }] },
+    rules: [ //
+      {
+        test: /\.html$/,
+        use: [{
+          loader: require.resolve("html-loader"),
+          options: { minimize: true }
+        }]
+      },
       {
         test: /\.js$/,
         include: config.paths.webRoot,
         loader: require.resolve("babel-loader"),
         options: {
           babelrc: false,
-          presets: [require("babel-preset-airbnb"), require("babel-preset-env")]
+          presets: [
+            require("babel-preset-env"),
+            require("babel-preset-stage-2")
+          ]
         }
       },
       {
@@ -60,13 +70,40 @@ module.exports = {
         options: {
           babelrc: false,
           presets: [
-            require("babel-preset-airbnb"),
             require("babel-preset-env"),
-            require("babel-preset-react")
+            require("babel-preset-react"),
+            require("babel-preset-stage-2"),
           ]
         }
       },
-      { test: /\.css$/, loaders: [require("style-loader"), require("css-loader")] },
+      {
+        test: /\.css$/,
+        use: [
+          require.resolve("style-loader"),
+          {
+            loader: require.resolve("css-loader"),
+            options: {}
+          },
+          {
+            loader: require.resolve("postcss-loader"),
+            options: {
+              ident: "postcss",
+              plugins: () => [
+                require("postcss-flexbugs-fixes"),
+                autoprefixer({
+                  browsers: [
+                    ">1%",
+                    "last 4 versions",
+                    "Firefox ESR",
+                    "not ie < 9" // React doesn't support IE8 anyway
+                  ],
+                  flexbox: "no-2009"
+                })
+              ]
+            }
+          }
+        ]
+      },
       {
         test: /\.scss$/,
         include: config.paths.webRoot,
@@ -79,8 +116,6 @@ module.exports = {
           {
             loader: require.resolve("postcss-loader"),
             options: {
-              // Necessary for external CSS imports to work
-              // https://github.com/facebookincubator/create-react-app/issues/2677
               ident: "postcss",
               plugins: () => [
                 require("postcss-flexbugs-fixes"),
@@ -102,6 +137,8 @@ module.exports = {
           }
         ]
       },
+
+
       {
         exclude: [/\.js$/, /\.jsx$/, /\.html$/, /\.json$/, /\.scss$/, /\.css$/, /\.ttf$/],
         loader: require.resolve("file-loader"),

@@ -40,6 +40,7 @@ module.exports = {
     extractCSS,
   ],
   resolve: {
+    extensions: ['.js', '.jsx'],
     modules: ['node_modules', 'bower_components'],
     descriptionFiles: ['package.json', 'bower.json'],
     alias: {
@@ -61,30 +62,40 @@ module.exports = {
 
   // LOADERS
   module: {
-    rules: [{
+    rules: [ //
+      {
+        test: /\.html$/,
+        use: [{
+          loader: require.resolve("html-loader"),
+          options: { minimize: true }
+        }]
+      },
+      {
         test: /\.js$/,
         include: config.paths.webRoot,
-        loader: require.resolve('babel-loader'),
+        loader: require.resolve("babel-loader"),
         options: {
           babelrc: false,
-          presets: [require("babel-preset-airbnb"),
-            require("babel-preset-env")
+          presets: [
+            require("babel-preset-airbnb"),
+            require("babel-preset-env"),
+            require("babel-preset-stage-2")
           ]
-        },
+        }
       },
       {
         test: /\.jsx$/,
         include: config.paths.webRoot,
-        loader: require.resolve('babel-loader'),
+        loader: require.resolve("babel-loader"),
         options: {
           babelrc: false,
-          presets: [require("babel-preset-airbnb"),
+          presets: [
             require("babel-preset-env"),
-            require("babel-preset-react")
+            require("babel-preset-react"),
+            require("babel-preset-stage-2"),
           ]
-        },
+        }
       },
-
       {
         test: /\.css$/,
         include: config.paths.webRoot,

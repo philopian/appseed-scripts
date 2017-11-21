@@ -1,4 +1,4 @@
-process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 const path = require("path");
 const webpack = require("webpack");
 const config = require("../config");
@@ -16,6 +16,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
     new HtmlWebpackPlugin({
       template: 'www/index.html',
       minify: {
@@ -36,12 +37,12 @@ module.exports = {
     extractCSS,
   ],
   resolve: {
+    extensions: ['.js', '.jsx'],
     modules: ["node_modules", "bower_components"],
     descriptionFiles: ["package.json", "bower.json"],
     alias: {
       bower_components: "../../bower_components"
-    },
-    extensions: ['.js', '.jsx']
+    }
   },
   externals: /^esri/,
 
@@ -51,22 +52,32 @@ module.exports = {
     config.paths.webRoot
   ],
   output: {
-    path: path.resolve(config.paths.deployWwwRoot),
+    path: path.resolve(__dirname, config.paths.deployWwwRoot),
     filename: 'code/bundle.js',
-    libraryTarget: "amd"
+    libraryTarget: 'amd'
   },
 
   // LOADERS
   module: {
-    rules: [
-      { test: /\.html$/, use: [{ loader: require.resolve("html-loader"), options: { minimize: true } }] },
+    rules: [ //
+      {
+        test: /\.html$/,
+        use: [{
+          loader: require.resolve("html-loader"),
+          options: { minimize: true }
+        }]
+      },
       {
         test: /\.js$/,
         include: config.paths.webRoot,
         loader: require.resolve("babel-loader"),
         options: {
           babelrc: false,
-          presets: [require("babel-preset-airbnb"), require("babel-preset-env")]
+          presets: [
+            require("babel-preset-env"),
+            require("babel-preset-react"),
+            require("babel-preset-stage-2")
+          ]
         }
       },
       {
@@ -76,11 +87,39 @@ module.exports = {
         options: {
           babelrc: false,
           presets: [
-            require("babel-preset-airbnb"),
             require("babel-preset-env"),
-            require("babel-preset-react")
+            require("babel-preset-react"),
+            require("babel-preset-stage-2"),
           ]
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          require.resolve("style-loader"),
+          {
+            loader: require.resolve("css-loader"),
+            options: {}
+          },
+          {
+            loader: require.resolve("postcss-loader"),
+            options: {
+              ident: "postcss",
+              plugins: () => [
+                require("postcss-flexbugs-fixes"),
+                autoprefixer({
+                  browsers: [
+                    ">1%",
+                    "last 4 versions",
+                    "Firefox ESR",
+                    "not ie < 9" // React doesn't support IE8 anyway
+                  ],
+                  flexbox: "no-2009"
+                })
+              ]
+            }
+          }
+        ]
       },
       {
         test: /\.scss$/,
@@ -121,6 +160,7 @@ module.exports = {
           })
         )
       },
+
 
       {
         exclude: [/\.js$/, /\.jsx$/, /\.html$/, /\.json$/, /\.scss$/, /\.css$/, /\.ttf$/],
