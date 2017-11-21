@@ -51,18 +51,18 @@ module.exports = {
           options: { minimize: true }
         }]
       },
-      // {
-      //   test: /\.js$/,
-      //   include: config.paths.webRoot,
-      //   loader: require.resolve("babel-loader"),
-      //   options: {
-      //     babelrc: false,
-      //     presets: [
-      //       require("babel-preset-env"),
-      //       require("babel-preset-stage-2")
-      //     ]
-      //   }
-      // },
+      {
+        test: /\.js$/,
+        include: config.paths.webRoot,
+        loader: require.resolve("babel-loader"),
+        options: {
+          babelrc: false,
+          presets: [
+            require("babel-preset-env"),
+            require("babel-preset-stage-2")
+          ]
+        }
+      },
       {
         test: /\.(js|jsx)$/,
         include: config.paths.webRoot,

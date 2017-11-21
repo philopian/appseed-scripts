@@ -3,3 +3,4 @@ node_modules
 __IGNORE-ME__
 .prettierignore
 yarn.lock
+package-lock.json
