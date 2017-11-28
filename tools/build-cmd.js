@@ -452,8 +452,6 @@ PORT=8080
 
 
   runServerAndBrowserLocally: (config) => {
-    // console.log(chalk.blue(`[Web Server]: http://localhost:${config.port}`));
-
     console.log(
       "\n\n\n",
       "******************************************************************************\n",
@@ -474,4 +472,8 @@ PORT=8080
     const cmd = `NODE_ENV=production PORT=8080 node ${path.join(config.paths.deployRoot, 'server/index.js')}`
     shell.exec(cmd);
   }
+
+
+
+
 };
