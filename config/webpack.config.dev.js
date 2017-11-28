@@ -25,6 +25,9 @@ module.exports = {
       bower_components: "../../bower_components"
     }
   },
+  node: {
+    fs: 'empty'
+  },
 
 
   // IN/OUT files

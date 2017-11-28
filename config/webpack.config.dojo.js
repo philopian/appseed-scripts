@@ -25,6 +25,9 @@ module.exports = {
       bower_components: "../../bower_components"
     }
   },
+  node: {
+    fs: 'empty'
+  },
   externals: /^esri/,
 
   // IN/OUT files
@@ -135,9 +138,5 @@ module.exports = {
         }
       }
     ]
-  },
-
-  node: {
-    fs: 'empty'
   }
 };
