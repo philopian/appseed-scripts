@@ -1,5 +1,6 @@
 const fs = require("fs");
 const fsExtra = require("node-fs-extra");
+const _ = require("lodash");
 const path = require("path");
 const chalk = require("chalk");
 const shell = require("shelljs");
@@ -8,6 +9,7 @@ const ora = require("ora");
 const webpack = require("webpack");
 const templates = require("./templates");
 const chmod = require("chmod");
+const openBrowser = require("react-dev-utils/openBrowser");
 
 
 function checkIfUndefined(item) {
@@ -17,6 +19,7 @@ function checkIfUndefined(item) {
     return item
   }
 }
+
 
 module.exports = {
   makeFolderIfDoesntExist: folderName => {
@@ -184,17 +187,28 @@ module.exports = {
     });
   },
 
-  createDotEnv: (config, folderName) => {
+  createDotEnv: (config, folderName, copyEnvFile) => {
     folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
-       * Create .env file
+       * Create/update .env file
        *********************************************/
-      const dotEnvFile = path.join(config.paths.deployRoot, folderName, ".env");
-      const dotEnvContents = `NODE_ENV=production
+      const dotEnvDestinationFile = path.join(config.paths.deployRoot, folderName, ".env");
+      let dotEnvContents;
+      if (copyEnvFile) {
+        const dotEnvFile = path.join(config.paths.appRoot, ".env");
+        dotEnvContents = fs.readFileSync(dotEnvFile, 'utf8');
+
+        // Switch the development to production for the node environment
+        dotEnvContents = dotEnvContents.replace('NODE_ENV=development', 'NODE_ENV=production');
+        dotEnvContents = dotEnvContents.replace('PORT=9090', 'PORT=8080');
+      } else {
+        dotEnvContents = `NODE_ENV=production
 PORT=8080
-      `;
-      fs.writeFile(dotEnvFile, dotEnvContents, "utf8", err => {
+`;
+      }
+
+      fs.writeFile(dotEnvDestinationFile, dotEnvContents, "utf8", err => {
         if (err) return console.error(err);
         console.log(chalk.blue("Created .env file"));
         resolve();
@@ -391,5 +405,73 @@ PORT=8080
         resolve();
       });
     });
+  },
+
+
+  printAzureInstuctions: (config) => {
+    return new Promise((resolve, reject) => {
+      console.log(
+        "\n\n\n",
+        "******************************************************************************\n",
+        "\n",
+        "      Production build is complete! \n",
+        "      To run your application locally follow these commands:\n",
+        "      $ cd " + config.fileNames.distRoot + " \n",
+        "      $ node server \n",
+        "\n",
+        "      You can now view your website at http://localhost:" +
+        config.port +
+        "\n",
+        "\n",
+        "******************************************************************************\n\n\n"
+      );
+      resolve();
+    });
+  },
+
+
+  printDockerInstuctions: (config) => {
+    return new Promise((resolve, reject) => {
+      console.log(
+        "\n\n\n",
+        "******************************************************************************\n",
+        "\n",
+        "      Production build is complete! \n",
+        "      To run your application locally with docker, follow these commands:\n",
+        "      $ cd " + config.fileNames.distRoot + " \n",
+        "      $ ./up.sh \n",
+        "\n",
+        "      You can now view your website at http://localhost:80" + "\n",
+        "\n",
+        "******************************************************************************\n\n\n"
+      );
+      resolve();
+    });
+  },
+
+
+
+  runServerAndBrowserLocally: (config) => {
+    // console.log(chalk.blue(`[Web Server]: http://localhost:${config.port}`));
+
+    console.log(
+      "\n\n\n",
+      "******************************************************************************\n",
+      "\n",
+      "      Production build is complete! \n",
+      "      Your application is running locally at: http://localhost:8080\n",
+      "\n",
+      "      To quit the server press [ctlr]+[C] in the terminal" + "\n",
+      "\n",
+      "******************************************************************************\n\n\n"
+    );
+
+    // Open browser
+    openBrowser(`http://localhost:${config.port}`);
+
+
+    // Run local production server
+    const cmd = `NODE_ENV=production PORT=8080 node ${path.join(config.paths.deployRoot, 'server/index.js')}`
+    shell.exec(cmd);
   }
 };

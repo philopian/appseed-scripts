@@ -40,29 +40,18 @@ function BuildAzure(config) {
     })
     .then(() => {
       // Create .env file
-      return buildCmd.createDotEnv(config);
+      return buildCmd.createDotEnv(config, null, _.includes(argv, "--local"));
     })
     .then(() => {
       // Create Webconfig file
       return buildCmd.createWebConfig(config);
     })
     .then(() => {
-      // DONE!
-      console.log(
-        "\n\n\n",
-        "******************************************************************************\n",
-        "\n",
-        "      Production build is complete! \n",
-        "      To run your application locally follow these commands:\n",
-        "      $ cd " + config.fileNames.distRoot + " \n",
-        "      $ node server \n",
-        "\n",
-        "      You can now view your website at http://localhost:" +
-        config.port +
-        "\n",
-        "\n",
-        "*************************************************************************\n\n\n"
-      );
+      if (_.includes(argv, "--local")) {
+        return buildCmd.runServerAndBrowserLocally(config);
+      } else {
+        return buildCmd.printAzureInstuctions(config);
+      }
     });
 }
 
@@ -88,7 +77,7 @@ function BuildDocker(config) {
     })
     .then(() => {
       // Create .env file
-      return buildCmd.createDotEnv(config, "nodejs");
+      return buildCmd.createDotEnv(config, "nodejs", _.includes(argv, "--local"));
     })
     .then(() => {
       // Copy the ./templates-folders/docker/ansible to ./DEPLOY/ansible
@@ -111,22 +100,14 @@ function BuildDocker(config) {
       return buildCmd.copyWwwToNginx(config);
     })
     .then(() => {
-      // DONE!
-      console.log(
-        "\n\n\n",
-        "******************************************************************************\n",
-        "\n",
-        "      Production build is complete! \n",
-        "      To run your application locally with docker, follow these commands:\n",
-        "      $ cd " + config.fileNames.distRoot + " \n",
-        "      $ ./up.sh \n",
-        "\n",
-        "      You can now view your website at http://localhost:80" + "\n",
-        "\n",
-        "*************************************************************************\n\n\n"
-      );
+      return buildCmd.printDockerInstuctions(config);
     });
 }
+
+
+
+
+
 
 //--Generate frontend files------
 const deployFolder = config.paths.deployRoot;
@@ -156,23 +137,18 @@ buildCmd
       return buildCmd.buildWebpack(config);
     }
   })
-
-.then(() => {
-  // User provided the "dojo" argument
-  if (_.includes(argv, "--dojo")) {
-    // Create dojoConfig file in the prod folder
-    const dojoConfigFilename = path.join(config.paths.deployWwwRoot, 'dojoConfig.js');
-    return buildCmd.createFileFromTemplate(dojoConfigFilename, templates.dojoProdConfig());
-  } else {
-    // Next
-    return;
-  }
-})
-
-
-
-
-.then(() => {
+  .then(() => {
+    // User provided the "dojo" argument
+    if (_.includes(argv, "--dojo")) {
+      // Create dojoConfig file in the prod folder
+      const dojoConfigFilename = path.join(config.paths.deployWwwRoot, 'dojoConfig.js');
+      return buildCmd.createFileFromTemplate(dojoConfigFilename, templates.dojoProdConfig());
+    } else {
+      // Next
+      return;
+    }
+  })
+  .then(() => {
     // Build bower vendor files
     const outCssFile = path.join(
       config.paths.deployWwwRoot,
@@ -199,13 +175,16 @@ buildCmd
   .then(() => {
     // User provided the "azure" argument
     if (_.includes(argv, "--azure")) {
-      BuildAzure(config);
+      return BuildAzure(config, _.includes(argv, "--local"));
     }
-
+    return;
+  })
+  .then(() => {
     // User provided the "docker" argument
     if (_.includes(argv, "--docker")) {
-      BuildDocker(config);
+      return BuildDocker(config, _.includes(argv, "--local"));
     }
+    return;
   })
   .catch(function(e) {
     console.log(e); // "oh, no!"
