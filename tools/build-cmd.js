@@ -469,7 +469,9 @@ PORT=8080
 
 
     // Run local production server
-    const cmd = `NODE_ENV=production PORT=8080 node ${path.join(config.paths.deployRoot, 'server/index.js')}`
+    process.env.NODE_ENV = "production";
+    process.env.PORT = 8080;
+    const cmd = `cd ${config.paths.deployRoot} && node server`;
     shell.exec(cmd);
   }
 
