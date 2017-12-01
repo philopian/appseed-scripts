@@ -12,10 +12,10 @@ console.log(
   "",
   chalk.bgCyan("Command:"),
   " $ appseed test\n",
-  chalk.bgCyan("Application Root:"),
-  ` ${appDirectory}\n`,
-  chalk.bgCyan("Argument:"),
-  ` ${argv}\n`
+  // chalk.bgCyan("Application Root:"),
+  // ` ${appDirectory}\n`,
+  // chalk.bgCyan("Argument:"),
+  // ` ${argv}\n`
 );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
