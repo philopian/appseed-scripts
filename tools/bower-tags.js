@@ -18,7 +18,7 @@ const injectTagsIntoHtml = appDir => {
   files.forEach(d => {
     let tagPath = d;
     tagPath = tagPath.replace(appDir + "/www", ""); // get relative path
-    tagPath = tagPath.replace(appDir + "\\www <file:///\\www> ", ""); // get windows relative path
+    tagPath = tagPath.replace(appDir + "\\www", ""); // get windows relative path
     tagPath = tagPath.replace("www/", "");
     tagPath = tagPath.replace("www\\", ""); // windows paths
     tagPath = tagPath.replace(/\\/g, "/");
