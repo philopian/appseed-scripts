@@ -9,15 +9,11 @@ const yarnOrNpm = require('yarn-or-npm');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-console.log(
-  "",
-  chalk.bgCyan("Command:"),
-  " $ appseed start\n",
-  // chalk.bgCyan("Application Root:"),
-  // ` ${appDirectory}\n`,
-  // chalk.bgCyan("Argument:"),
-  // ` ${argv}\n`
-);
+// console.log(
+//   "",
+//   chalk.bgCyan("Command:"),
+//   " $ appseed start\n"
+// );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

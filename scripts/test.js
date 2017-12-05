@@ -8,15 +8,11 @@ const shell = require("shelljs");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-console.log(
-  "",
-  chalk.bgCyan("Command:"),
-  " $ appseed test\n",
-  // chalk.bgCyan("Application Root:"),
-  // ` ${appDirectory}\n`,
-  // chalk.bgCyan("Argument:"),
-  // ` ${argv}\n`
-);
+// console.log(
+//   "",
+//   chalk.bgCyan("Command:"),
+//   " $ appseed test\n"
+// );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Run Jest on the application files (./www/*)

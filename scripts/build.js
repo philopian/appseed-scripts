@@ -8,15 +8,11 @@ const _ = require("lodash");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-console.log(
-  "",
-  chalk.bgCyan("Command:"),
-  " $ appseed build\n",
-  // chalk.bgCyan("Application Root:"),
-  // ` ${appDirectory}\n`,
-  // chalk.bgCyan("Argument:"),
-  // ` ${argv}\n`
-);
+// console.log(
+//   "",
+//   chalk.bgCyan("Command:"),
+//   " $ appseed build\n"
+// );
 
 const bowerTags = require("../tools/bower-tags");
 const buildCmd = require("../tools/build-cmd");
