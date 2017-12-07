@@ -45,7 +45,8 @@ module.exports = {
     descriptionFiles: ['package.json', 'bower.json'],
     alias: {
       BowerComponents: path.resolve(config.paths.appRoot + "/bower_components"),
-      NodeModules: path.resolve(config.paths.appRoot + "/node_modules")
+      NodeModules: path.resolve(config.paths.appRoot + "/node_modules"),
+      AppRoot: path.resolve(config.paths.appRoot)
     }
   },
   node: {
