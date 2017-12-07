@@ -10,7 +10,7 @@ module.exports = {
     webRoot: path.join(ROOT, "./www"),
   },
   paths: {
-    // appRoot: ROOT,
+    appRoot: ROOT,
     webRoot: path.join(ROOT, "./www"),
     deployRoot: path.join(ROOT, DEPLOY),
     deployWwwRoot: path.join(ROOT, DEPLOY, 'www'),
