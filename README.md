@@ -1,5 +1,5 @@
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="100%" height="173.000000pt" viewBox="0 0 547.000000 173.000000"
+ width="189.7pt" height="60pt" viewBox="0 0 547.000000 173.000000"
  preserveAspectRatio="xMidYMid meet">
 <metadata>
 Created by potrace 1.15, written by Peter Selinger 2001-2017
@@ -34,6 +34,7 @@ fill="#000000" stroke="none">
 -230 0 0 -310z"/>
 </g>
 </svg>
+
 
 
 
