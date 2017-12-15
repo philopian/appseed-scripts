@@ -1,10 +1,10 @@
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="547.000000pt" height="173.000000pt" viewBox="0 0 547.000000 173.000000"
+ width="100%" height="173.000000pt" viewBox="0 0 547.000000 173.000000"
  preserveAspectRatio="xMidYMid meet">
 <metadata>
 Created by potrace 1.15, written by Peter Selinger 2001-2017
 </metadata>
-<g transform="translate(0.000000,173.000000) scale(0.100000,-0.100000)"
+<g transform="translate(0.000000,173.000000) scale(0.100000,-0.100000)" 
 fill="#000000" stroke="none">
 <path fill="rgb(19,122,190)" d="M1257 1513 c-278 -183 -362 -247 -299 -230 49 14 123 29 126 26 2 -2
 -214 -285 -481 -629 -326 -421 -479 -626 -469 -628 12 -3 892 530 944 571 30
