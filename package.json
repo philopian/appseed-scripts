@@ -1,10 +1,10 @@
 {
   "name": "appseed-scripts",
-  "version": "2.0.28",
+  "version": "2.0.29",
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
-    "update": "npm version patch && git push origin master && npm publish"
+    "update": "git push origin master && npm version patch && npm publish"
   },
   "author": "Phil Willis <pdotwdot@gmail.com> (http://www.philwillis.pw/)",
   "license": "ISC",

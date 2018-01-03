@@ -33,7 +33,7 @@ module.exports = {
       },
       inject: false
     }),
-    new UglifyJSPlugin(),
+    new UglifyJSPlugin({ sourceMap: true }),
     extractCSS,
   ],
   resolve: {
