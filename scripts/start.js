@@ -58,7 +58,7 @@ var server = new WebpackDevServer(compiler, {
   watchOptions: {
     ignored: /node_modules/
   },
-  https: false,
+  https: config.https !== undefined ? config.https : false,
   historyApiFallback: {
     disableDotRule: true
   }
@@ -68,7 +68,7 @@ server.listen(config.port, "127.0.0.1", () => {
   argv.forEach(x => {
     switch (x) {
       case "--open=browser":
-        openBrowser(`http://localhost:${config.port}`);
+        openBrowser(`${(config.https !== undefined && config.https) ? 'https' : 'http'}://localhost:${config.port}`);
         break;
       case "--open=storybook":
         openBrowser(`http://localhost:${config.portStorybook}`);
