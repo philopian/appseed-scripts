@@ -16,3 +16,13 @@ console.log(
   ` ${argv}\n`
 );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// $ appseed new component
+// TODO: check to see if there is a ./www/react/components folder
+// TODO: check to see if there isn't a folder with that user provided container name
+// TODO: build the files base on template
+
+// $ appseed new container
+// $ appseed new page
