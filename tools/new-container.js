@@ -184,7 +184,7 @@ setConsoleOptions({
 });
 
 const Info = {
-  componentSection: "Components",
+  componentSection: "Container",
   title: "${opts.componentName.titleCase}",
   about: "${opts.componentDescription}",
   props: {
