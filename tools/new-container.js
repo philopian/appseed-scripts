@@ -13,8 +13,8 @@ const cmdPrompt = ()=> {
       {
         type: "command",
         name: "componentName",
-        message: "Give our component a name!",
-        default: "HelloComponent",
+        message: "Give our container-component a name!",
+        default: "HelloContainer",
         filter: function(val) {
           return {
             input: val,
@@ -28,7 +28,7 @@ const cmdPrompt = ()=> {
       {
         type: "command",
         name: "componentDescription",
-        message: "Give our component a short description!",
+        message: "Give our container-component a short description!",
         default: ""
       }
     ])
@@ -37,11 +37,11 @@ const cmdPrompt = ()=> {
       const paths = {
         componentsDir: path.join(
           fs.realpathSync(process.cwd()),
-          "www/react/components"
+          "www/react/containers"
         ),
         newComponentDir: path.join(
           fs.realpathSync(process.cwd()),
-          "www/react/components/" + answers.componentName.titleCase
+          "www/react/containers/" + answers.componentName.titleCase
         )
       };
 
@@ -49,7 +49,7 @@ const cmdPrompt = ()=> {
       if (fs.existsSync(paths.componentsDir)) {
         //  Check to see if there is a ./www/react/components/<component-name> folder
         if (!fs.existsSync(paths.newComponentDir)) {
-          console.log('[new component will live here:]', paths.newComponentDir);
+          console.log('[new container-component will live here:]', paths.newComponentDir);
           // Make the component's dir
           fs.ensureDir(paths.newComponentDir, err => {
             if (err) return console.log(chalk.bgRed(err));
@@ -72,10 +72,12 @@ const cmdPrompt = ()=> {
             appendStoryToStorybook(fs.realpathSync(process.cwd()), answers.componentName.titleCase)
           });
         } else {
-          console.log(chalk.bgRed("[Error] It seems like you already have a component with that name"));
+          console.log(chalk.bgRed("[Error] It seems like you already have a container-component with that name"));
         }
       } else {
-        console.log(chalk.bgRed("[Error] There doesn't seem to be a 'components' folder at ./www/react/components/"));
+        console.log(paths.componentsDir);
+        
+        console.log(chalk.bgRed("[Error] There doesn't seem to be a 'containers' folder at ./www/react/containers/"));
       }
     });
 };
@@ -106,7 +108,7 @@ const appendStoryToStorybook = (rootDir, componentName) => {
 
   const filePath = path.join(rootDir, ".storybook/config.js");
   const oldSnippet = new RegExp("} // DONT'T DELETE THIS", "g");
-  const newSnippet = `  require("../www/react/components/${componentName}/storybook");
+  const newSnippet = `  require("../www/react/containers/${componentName}/storybook");
 } // DONT'T DELETE THIS`;
   return updateFileContents(
     filePath,
@@ -121,30 +123,38 @@ const buildJsx = (opts, paths) => {
   const fileName = `${opts.componentName.titleCase}`;
   const fileContents = `import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Wrapper } from "./styles.js";
 
+// import { aa } from "../../actions/aaAA";
+
 class ${opts.componentName.titleCase} extends Component {
-  constructor(props) {
-    super(props);
-  }
+  state = {
+    yy: ""
+  };
+
   render() {
     return (
-      <div className="my-component">
-        <Wrapper>
-          <h1>${opts.componentName.input}</h1>
-          <p>{this.props.message}</p>
-        </Wrapper>
-      </div>
+      <Wrapper>
+        <h1>Hello containter!</h1>
+        <p>Container components connect to the redux store for props</p>
+      </Wrapper>
     );
   }
 }
+
 ${opts.componentName.titleCase}.propTypes = {
-  message: PropTypes.string
+  // xx: PropTypes.string.isRequired,
+  // aa: PropTypes.func.isRequired,
 };
-${opts.componentName.titleCase}.defaultProps = {
-  message: "World"
-};
-export default ${opts.componentName.titleCase};
+const mapStateToProps = state => ({
+  // xx: state.xx,
+});
+const mapDispatchToProps = dispatch => ({
+  // aa: () => dispatch(aa())
+});
+export default connect(mapStateToProps, mapDispatchToProps)(${opts.componentName.titleCase});
+  
 `;
   makeFile(filepath, fileContents, fileName);
 };
@@ -178,8 +188,8 @@ const Info = {
   title: "${opts.componentName.titleCase}",
   about: "${opts.componentDescription}",
   props: {
-    message: "message passed",
-    handleClick: action("[Style Components] - click")
+    xx: "Hello Container!",
+    aa: action("Action Clicked")
   }
 };
 
@@ -197,15 +207,6 @@ const buildStyles = (opts, paths) => {
 // Overriding styles
 export const Wrapper = styled.div \`
   color: rgb(37, 37, 37);
-  button {
-    color: #f15c5c;
-    background-color: #feee7d;
-    margin: 10px;
-  }
-  p {
-    font-size: 20px;
-    color: white;
-  }
 \`;`;
   makeFile(filepath, fileContents, fileName);
 };
@@ -235,7 +236,6 @@ describe("Addition", () => {
 });`;
   makeFile(filepath, fileContents, fileName);
 };
-
 
 ///
 

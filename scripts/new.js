@@ -7,6 +7,7 @@ const shell = require("shelljs");
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
 const newComponent = require("../tools/new-component");
+const newContainer = require("../tools/new-container");
 const newReducer = require("../tools/new-reducer");
 
 // console.log(
@@ -29,7 +30,7 @@ if (argv.includes("component")) {
 } else if (argv.includes("reducer")) {
   newReducer();
 } else if (argv.includes("container")) {
-  // newContainer();
+  newContainer();
 } else if (argv.includes("page")) {
   // newPage();
 } else {
