@@ -17,92 +17,9 @@ const config = require(path.join(appDirectory, "appseed.config.js"));
 const bowerTags = require("../tools/bower-tags");
 const buildCmd = require("../tools/build-cmd");
 const templates = require("../tools/templates");
+const buildAzure = require("../tools/build-azure-node");
+const buildDocker = require("../tools/build-docker");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//-- Functions-----
-function BuildAzure(config) {
-  console.log(chalk.blue("Building Azure deploy version"));
-
-  // Create prod package.json
-  buildCmd
-    .copyPackageJson(config)
-    .then(() => {
-      // Create server files
-      return buildCmd.copyServerFiles(config);
-    })
-    .then(() => {
-      // Copy appseed.config.js file
-      return buildCmd.copyAppseedConfig(config);
-    })
-    .then(() => {
-      // Create .env file
-      return buildCmd.createDotEnv(config, null, _.includes(argv, "--local"));
-    })
-    .then(() => {
-      // Create Webconfig file
-      return buildCmd.createWebConfig(config);
-    })
-    .then(() => {
-      if (_.includes(argv, "--local")) {
-        return buildCmd.runServerAndBrowserLocally(config);
-      } else {
-        return buildCmd.printAzureInstuctions(config);
-      }
-    });
-}
-
-function BuildDocker(config) {
-  console.log(chalk.blue("Building Docker deploy version"));
-
-  // Create prod package.json
-  const nodejsPath = path.join(config.paths.deployRoot, "nodejs");
-  buildCmd
-  // Make the ./DEPLOY/nodejs/ folder
-    .makeFolderIfDoesntExist(nodejsPath)
-    .then(() => {
-      // Copy & clean the packageJson file
-      return buildCmd.copyPackageJson(config, "nodejs");
-    })
-    .then(() => {
-      // Copy the server files to ./DEPLOY/nodejs/server/
-      return buildCmd.copyServerFiles(config, "nodejs");
-    })
-    .then(() => {
-      // Copy appseed.config.js file
-      return buildCmd.copyAppseedConfig(config, "nodejs");
-    })
-    .then(() => {
-      // Create .env file
-      return buildCmd.createDotEnv(config, "nodejs", _.includes(argv, "--local"));
-    })
-    .then(() => {
-      // Copy the ./templates-folders/docker/ansible to ./DEPLOY/ansible
-      return buildCmd.createAnsibleFiles(config);
-    })
-    .then(() => {
-      // TODO: Copy the ./templates-folders/docker/nginx to ./DEPLOY/nginx
-      return buildCmd.createNginxFiles(config);
-    })
-    .then(() => {
-      // Create Dockerfile
-      return buildCmd.createDockerFiles(config);
-    })
-    .then(() => {
-      // TODO: Copy the ./templates-folders/docker/nginx to ./DEPLOY/nginx
-      return buildCmd.copyTemplateFiles(config);
-    })
-    .then(() => {
-      // Copy the ./www/ to ./nginx/www/
-      return buildCmd.copyWwwToNginx(config);
-    })
-    .then(() => {
-      return buildCmd.printDockerInstuctions(config);
-    });
-}
-
-
-
-
 
 
 //--Generate frontend files------
@@ -171,14 +88,14 @@ buildCmd
   .then(() => {
     // User provided the "azure" argument
     if (_.includes(argv, "--azure")) {
-      return BuildAzure(config, _.includes(argv, "--local"));
+      return buildAzure.build(config, _.includes(argv, "--local"));
     }
     return;
   })
   .then(() => {
     // User provided the "docker" argument
     if (_.includes(argv, "--docker")) {
-      return BuildDocker(config, _.includes(argv, "--local"));
+      return buildDocker.build(config, _.includes(argv, "--local"));
     }
     return;
   })
