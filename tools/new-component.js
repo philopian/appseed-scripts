@@ -238,6 +238,8 @@ describe("Addition", () => {
 
 
 
-module.exports = {
-  cmdPrompt: cmdPrompt
-}
+// module.exports = {
+//   cmdPrompt: cmdPrompt()
+// }
+
+module.exports = cmdPrompt;
