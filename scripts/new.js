@@ -21,16 +21,15 @@ const newReducer = require("../tools/new-reducer");
 // );
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// $ appseed new container
-// $ appseed new page
-
 if (argv.includes("component")) {
   // Show prompt for new component
   newComponent();
-} else if (argv.includes("reducer")) {
-  newReducer();
 } else if (argv.includes("container")) {
+  // Show prompt for new container
   newContainer();
+} else if (argv.includes("reducer")) {
+  // Show prompt for new reducer
+  newReducer();
 } else if (argv.includes("page")) {
   // newPage();
 } else {
