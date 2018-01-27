@@ -4,7 +4,7 @@ const _ = require("lodash");
 const buildCmd = require("../tools/build-cmd");
 
 module.exports = {
-  build: function BuildAzure(config) {
+  build: function BuildAzure(config, argv) {
     console.log(chalk.blue("Building Azure deploy version"));
 
     // Create prod package.json
