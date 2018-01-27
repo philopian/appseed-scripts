@@ -6,6 +6,7 @@ const shell = require('shelljs');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, 'appseed.config.js'));
+const newComponent = require('../tools/new-component');
 console.log(
   '',
   chalk.bgCyan('Command:'),
@@ -26,3 +27,20 @@ console.log(
 
 // $ appseed new container
 // $ appseed new page
+
+
+// argv.indexOf('component')
+
+
+if (argv.includes('component')) {
+  console.log('[new component]');
+  
+
+  newComponent.cmdPrompt();
+
+
+
+} else {
+  console.log('NOPE');
+  
+}
