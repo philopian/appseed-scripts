@@ -176,6 +176,11 @@ import { withInfo } from "@storybook/addon-info";
 import { withKnobs, text, boolean, number } from "@storybook/addon-knobs";
 import { setConsoleOptions } from "@storybook/addon-console";
 
+const Provider = require("react-redux");
+const createStore = require("redux");
+const reducers = require("../../reducers");
+const store = createStore(reducers);
+
 import React from "react";
 import Component from "./index.js";
 
@@ -195,7 +200,14 @@ const Info = {
 
 storiesOf(Info.componentSection, module)
   .addDecorator(withKnobs)
-  .add(Info.title, withInfo(Info.about)(() => <Component {...Info.props} />));`;
+  .add(
+    Info.title,
+    withInfo(Info.about)(() => (
+      <Provider store={store}>
+        <Component />
+      </Provider>
+    ))
+  );`;
   makeFile(filepath, fileContents, fileName);
 };
 
