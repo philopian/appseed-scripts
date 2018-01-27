@@ -2,8 +2,6 @@ const path = require("path");
 const chalk = require("chalk");
 const _ = require("lodash");
 
-
-
 const buildCmd = require("../tools/build-cmd");
 
 module.exports = {

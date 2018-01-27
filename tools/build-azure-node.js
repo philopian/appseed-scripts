@@ -1,6 +1,8 @@
 const chalk = require("chalk");
 const _ = require("lodash");
 
+const buildCmd = require("../tools/build-cmd");
+
 module.exports = {
   build: function BuildAzure(config) {
     console.log(chalk.blue("Building Azure deploy version"));
