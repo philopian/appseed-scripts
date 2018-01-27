@@ -176,9 +176,9 @@ import { withInfo } from "@storybook/addon-info";
 import { withKnobs, text, boolean, number } from "@storybook/addon-knobs";
 import { setConsoleOptions } from "@storybook/addon-console";
 
-const Provider = require("react-redux");
-const createStore = require("redux");
-const reducers = require("../../reducers");
+const { Provider } = require("react-redux");
+const { createStore } = require("redux");
+const reducers = require("../../reducers").default;
 const store = createStore(reducers);
 
 import React from "react";
