@@ -58,5 +58,5 @@ if (shell.exec(runNspCheck).code !== 0) {
     printDevError(); // Warn but don't break the development process
   }
 } else {
-  printAllGood();
+  // printAllGood();
 }
