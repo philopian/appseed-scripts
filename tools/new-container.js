@@ -20,7 +20,7 @@ const cmdPrompt = ()=> {
             input: val,
             titleCase: (val.indexOf(" ") > -1) ? _.startCase(_.toLower(val))
               .split(" ")
-              .join("") : _.startCase(val),
+              .join("") : _.startCase(val).replace(" ",""),
             kebabCase: _.kebabCase(val)
           };
         }
