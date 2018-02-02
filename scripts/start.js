@@ -63,7 +63,7 @@ var server = new WebpackDevServer(compiler, {
     disableDotRule: true
   }
 });
-server.listen(config.port, "127.0.0.1", () => {
+server.listen(config.port, "0.0.0.0", () => {
   console.log(chalk.blue(`[Web Server]: http://localhost:${config.port}`));
   argv.forEach(x => {
     switch (x) {
