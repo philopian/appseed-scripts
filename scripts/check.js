@@ -4,16 +4,9 @@ const argv = process.argv.slice(2);
 const chalk = require("chalk");
 const shell = require('shelljs');
 
-// const nspReporterChecker = require("../tools/nsp-reporter-checker");
-
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, 'appseed.config.js'));
-// console.log(
-//   '',
-//   chalk.bgCyan('Command:'),
-//   ' $ appseed server\n'
-// );
-
+// console.log(chalk.bgCyan('Command:'),"[CMD] check");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printProdError(){
@@ -46,11 +39,8 @@ function printAllGood(){
  * 3: unknown error
  * 4: there was an error in the output reporter
  * 
- * 
  */
-// const runNspCheck = `${appDirectory}/node_modules/.bin/nsp check`;
 const runNspCheck = `${appDirectory}/node_modules/.bin/nsp check --reporter summary`;
-
 if (shell.exec(runNspCheck).code !== 0) {
   if (process.env.NODE_ENV === 'production') {
     printProdError(); // Break the build process if NODE_ENV is production
