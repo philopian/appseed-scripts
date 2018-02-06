@@ -8,11 +8,7 @@ const _ = require("lodash");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-// console.log(
-//   "",
-//   chalk.bgCyan("Command:"),
-//   " $ appseed build\n"
-// );
+// console.log(chalk.bgCyan("Command:")," $ appseed build\n";
 
 const bowerTags = require("../tools/bower-tags");
 const buildCmd = require("../tools/build-cmd");
@@ -88,14 +84,14 @@ buildCmd
   .then(() => {
     // User provided the "azure" argument
     if (_.includes(argv, "--azure")) {
-      return buildAzure.build(config, _.includes(argv, "--local"));
+      return buildAzure.build(config, argv);
     }
     return;
   })
   .then(() => {
     // User provided the "docker" argument
     if (_.includes(argv, "--docker")) {
-      return buildDocker.build(config, _.includes(argv, "--local"));
+      return buildDocker.build(config, argv);
     }
     return;
   })

@@ -237,6 +237,8 @@ PORT=8080
   },
 
   copyServerFiles: (config, folderName) => {
+    console.log('[copyServerFiles]  ?????????');
+    
     folderName = checkIfUndefined(folderName);
     return new Promise((resolve, reject) => {
       /*********************************************
