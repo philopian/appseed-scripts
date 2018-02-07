@@ -74,7 +74,7 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        include: config.paths.webRoot,
+        include: config.paths.appRoot,
         loader: require.resolve("babel-loader"),
         options: {
           babelrc: false,
@@ -87,6 +87,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        include: config.paths.appRoot,
         use: [
           require.resolve("style-loader"),
           {
@@ -115,7 +116,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        include: config.paths.webRoot,
+        include: config.paths.appRoot,
         loader: extractCSS.extract(
           Object.assign({
             fallback: require.resolve('style-loader'),
