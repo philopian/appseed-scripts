@@ -314,6 +314,7 @@ PORT=8080
         // Generate SPA webconfig
         const webconfigFilename = path.join(
           config.paths.deployRoot,
+          "www",
           "web.config"
         );
         const webconfigContents = templates.spaWebConfig();

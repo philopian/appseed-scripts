@@ -36,7 +36,7 @@ module.exports = {
             <clear />
             <!-- ignore static files -->
             <rule name="AppSeed Conditions" stopProcessing="true">
-                <match url="(www/code/.*|www/assets/.*|www/fonts/.*)" />
+                <match url="(code/.*|assets/.*|fonts/.*)" />
                 <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
                 <action type="None" />
             </rule>
@@ -49,7 +49,7 @@ module.exports = {
             <rule name="AppSeed Wildcard" enabled="true">
                 <match url="(.*)" />
                 <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
-                <action type="Rewrite" url="www/index.html" />
+                <action type="Rewrite" url="index.html" />
             </rule>
           </rules>
       </rewrite>
