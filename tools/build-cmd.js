@@ -311,10 +311,10 @@ PORT=8080
   createSPAWebConfig: config => {
       // Generate Dockerfile files
       return new Promise((resolve, reject) => {
-        // Generate Nginx Dockerfile
+        // Generate SPA webconfig
         const webconfigFilename = path.join(
           config.paths.deployRoot,
-          "web.config",
+          "web.config"
         );
         const webconfigContents = templates.spaWebConfig();
         fs.writeFileSync(
