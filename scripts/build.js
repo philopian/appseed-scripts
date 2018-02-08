@@ -95,6 +95,12 @@ buildCmd
     }
     return;
   })
+  .then(() => {
+    if (_.includes(argv, "--iis")) {
+      return buildCmd.createSPAWebConfig(config);
+    }
+    return;
+  })
   .catch(function(e) {
     console.log(e); // "oh, no!"
   });

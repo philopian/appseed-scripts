@@ -307,6 +307,26 @@ PORT=8080
     });
   },
 
+
+  createSPAWebConfig: config => {
+      // Generate Dockerfile files
+      return new Promise((resolve, reject) => {
+        // Generate Nginx Dockerfile
+        const webconfigFilename = path.join(
+          config.paths.deployRoot,
+          "web.config",
+        );
+        const webconfigContents = templates.spaWebConfig();
+        fs.writeFileSync(
+          webconfigFilename,
+          webconfigContents,
+          "utf-8"
+        );
+        resolve();
+      });
+    },
+
+
   createAnsibleFiles: config => {
     return new Promise((resolve, reject) => {
       // Generate Ansible files

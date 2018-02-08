@@ -27,6 +27,37 @@ module.exports = {
 `;
   },
 
+  spaWebConfig: () => {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+      <rewrite>
+          <rules>
+            <clear />
+            <!-- ignore static files -->
+            <rule name="AppSeed Conditions" stopProcessing="true">
+                <match url="(www/code/.*|www/assets/.*|www/fonts/.*)" />
+                <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
+                <action type="None" />
+            </rule>
+            <!-- check if its root url and navigate to default page -->
+            <rule name="Index Request" enabled="true" stopProcessing="true">
+                <match url="^$" />
+                <action type="Redirect" url="/receivertrans" logRewrittenUrl="true" />
+            </rule>
+            <!--remaining all other url's point to index.html file -->
+            <rule name="AppSeed Wildcard" enabled="true">
+                <match url="(.*)" />
+                <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
+                <action type="Rewrite" url="www/index.html" />
+            </rule>
+          </rules>
+      </rewrite>
+    </system.webServer>
+</configuration>
+`;
+  },
+
   dockerfileNodejs: () => {
     return `FROM node:7.7.1
     

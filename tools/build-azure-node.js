@@ -11,8 +11,11 @@ module.exports = {
     buildCmd
       .copyPackageJson(config)
       .then(() => {
-        // Create server files
-        return buildCmd.copyServerFiles(config);
+        // Copy the express folder
+        if (_.includes(argv, "--express")) {
+          return buildCmd.copyServerFiles(config);
+        } 
+        return;
       })
       .then(() => {
         // Copy appseed.config.js file
@@ -23,8 +26,11 @@ module.exports = {
         return buildCmd.createDotEnv(config, null, _.includes(argv, "--local"));
       })
       .then(() => {
-        // Create Webconfig file
-        return buildCmd.createWebConfig(config);
+        // Create nodejs Webconfig file for azure
+        if (_.includes(argv, "--express")) {
+          return buildCmd.createWebConfig(config);
+        } 
+        return;
       })
       .then(() => {
         if (_.includes(argv, "--local")) {
