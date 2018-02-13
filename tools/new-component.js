@@ -179,7 +179,10 @@ const Info = {
   about: "${opts.componentDescription}",
   props: {
     message: "message passed",
-    handleClick: action("[Style Components] - click")
+    handleClick: action(e => {
+      console.log("[handleClick]");
+      console.log(e);
+    })
   }
 };
 
