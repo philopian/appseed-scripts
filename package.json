@@ -1,10 +1,10 @@
 {
   "name": "appseed-scripts",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
-    "up": "npm version patch && git add . && git commit -m 'up version' && git push origin master"
+    "up": "npm version patch && git add . && git commit -m 'up version'"
   },
   "author": "Phil Willis <pdotwdot@gmail.com> (http://www.philwillis.pw/)",
   "repository": {
