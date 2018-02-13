@@ -26,6 +26,7 @@
     "@storybook/addon-console": "1.0.0",
     "@storybook/addon-info": "3.3.13",
     "@storybook/addon-knobs": "3.3.13",
+    "@storybook/addons": "^3.3.0",
     "@storybook/react": "3.3.13",
     "autoprefixer": "8.0.0",
     "babel-cli": "6.26.0",
