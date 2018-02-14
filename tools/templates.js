@@ -29,32 +29,23 @@ module.exports = {
 
   spaWebConfig: () => {
     return `<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <system.webServer>
-      <rewrite>
-          <rules>
-            <clear />
-            <!-- ignore static files -->
-            <rule name="AppSeed Conditions" stopProcessing="true">
-                <match url="(code/.*|assets/.*|fonts/.*)" />
-                <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
-                <action type="None" />
-            </rule>
-            <!-- check if its root url and navigate to default page -->
-            <rule name="Index Request" enabled="true" stopProcessing="true">
-                <match url="^$" />
-                <action type="Redirect" url="/receivertrans" logRewrittenUrl="true" />
-            </rule>
-            <!--remaining all other url's point to index.html file -->
-            <rule name="AppSeed Wildcard" enabled="true">
-                <match url="(.*)" />
-                <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
-                <action type="Rewrite" url="index.html" />
-            </rule>
-          </rules>
-      </rewrite>
-    </system.webServer>
-</configuration>
+    <configuration>
+       <system.webServer>
+          <rewrite>
+             <rules>
+                <remove name="pushState" />
+                <rule name="pushState" stopProcessing="true">
+                   <match url=".*" />
+                   <conditions logicalGrouping="MatchAll">
+                      <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                      <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                   </conditions>
+                   <action type="Rewrite" url="/" />
+                </rule>
+             </rules>
+          </rewrite>
+       </system.webServer>
+    </configuration>
 `;
   },
 
