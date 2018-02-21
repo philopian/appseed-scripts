@@ -1,6 +1,6 @@
 {
   "name": "appseed-scripts",
-  "version": "2.1.23",
+  "version": "2.1.22",
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
