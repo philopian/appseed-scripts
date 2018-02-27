@@ -143,7 +143,7 @@ const cmdPrompt = () => {
 const makeFile = (filePath, fileContents, fileName) => {
   fs.writeFile(filePath, fileContents, "utf8", err => {
     if (err) return console.log(chalk.bgRed(err));
-    console.log(chalk.bgCyan(`[File created] ${fileName}`));
+    // console.log(chalk.bgCyan(`[File created] ${fileName}`));
   });
 };
 
@@ -153,7 +153,7 @@ const updateFileContents = (filePath, oldSnippet, newSnippet, message) => {
     fileContents = fileContents.replace(oldSnippet, newSnippet);
     fs.writeFile(filePath, fileContents, "utf8", err => {
       if (err) return console.log(chalk.bgRed(err));
-      console.log(chalk.bgCyan(`${message}`));
+      // console.log(chalk.bgCyan(`${message}`));
       resolve();
     });
   });
