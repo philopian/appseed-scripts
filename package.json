@@ -89,8 +89,8 @@
     "uglifyjs-webpack-plugin": "1.2.4",
     "url-loader": "1.0.1",
     "uuid": "3.2.1",
-    "webpack": "4.2.0",
-    "webpack-dev-server": "3.1.1",
+    "webpack": "3.11.0",
+    "webpack-dev-server": "2.11.1",
     "yarn-or-npm": "2.0.4"
   }
 }
