@@ -1,13 +1,7 @@
 process.env.NODE_ENV = 'development';
 const path = require('path');
 const webpack = require('webpack');
-// const config = require("./appseed.config");
 const config = require("../config");
-
-
-
-console.log('---PORT', process.env.PORT  ,config.port);
-
 
 
 module.exports = {
