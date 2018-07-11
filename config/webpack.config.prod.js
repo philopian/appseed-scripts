@@ -31,6 +31,9 @@ module.exports = {
   },
   devtool: "source-map",
   target: "web",
+  node: {
+    fs: 'empty'
+  },
 
   // PLUGINS
   plugins: [

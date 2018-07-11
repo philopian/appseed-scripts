@@ -34,6 +34,9 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],
+  node: {
+    fs: 'empty'
+  },
 
   // LOADERS
   module: {
