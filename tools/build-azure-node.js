@@ -13,6 +13,7 @@ module.exports = {
       .then(() => {
         // Copy the express folder
         if (_.includes(argv, "--express")) {
+          
           return buildCmd.copyServerFiles(config);
         } 
         return;

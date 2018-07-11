@@ -113,6 +113,8 @@ module.exports = {
           console.log(chalk.blue("FontAwesome fonts copied to DEPLOY"));
           resolve();
         });
+      } else {
+        resolve();
       }
     });
   },

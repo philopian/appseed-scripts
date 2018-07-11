@@ -17,7 +17,6 @@ const buildAzure = require("../tools/build-azure-node");
 const buildDocker = require("../tools/build-docker");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 //--Generate frontend files------
 const deployFolder = config.paths.deployRoot;
 buildCmd
@@ -50,8 +49,14 @@ buildCmd
     // User provided the "dojo" argument
     if (_.includes(argv, "--dojo")) {
       // Create dojoConfig file in the prod folder
-      const dojoConfigFilename = path.join(config.paths.deployWwwRoot, 'dojoConfig.js');
-      return buildCmd.createFileFromTemplate(dojoConfigFilename, templates.dojoProdConfig());
+      const dojoConfigFilename = path.join(
+        config.paths.deployWwwRoot,
+        "dojoConfig.js"
+      );
+      return buildCmd.createFileFromTemplate(
+        dojoConfigFilename,
+        templates.dojoProdConfig()
+      );
     } else {
       // Next
       return;
