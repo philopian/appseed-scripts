@@ -8,9 +8,7 @@ const _ = require("lodash");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-// console.log(chalk.bgCyan("Command:")," $ appseed build\n";
 
-const bowerTags = require("../tools/bower-tags");
 const buildCmd = require("../tools/build-cmd");
 const templates = require("../tools/templates");
 const buildAzure = require("../tools/build-azure-node");
@@ -30,10 +28,6 @@ buildCmd
     // Make the ./DEPLOY/www/code/ folder
     const wwwCodeFolder = path.join(config.paths.deployWwwRoot, "code");
     return buildCmd.makeFolderIfDoesntExist(wwwCodeFolder);
-  })
-  .then(() => {
-    // Cleanup bower tags from ./www/index.html file
-    return bowerTags.addVendorCssTag(appDirectory);
   })
   .then(() => {
     // User provided the "dojo" argument
@@ -61,18 +55,6 @@ buildCmd
       // Next
       return;
     }
-  })
-  .then(() => {
-    // Build bower vendor files
-    const outCssFile = path.join(
-      config.paths.deployWwwRoot,
-      "code/vendor.min.css"
-    );
-    return bowerTags.concatBowerFiles(appDirectory, outCssFile);
-  })
-  .then(() => {
-    // Clean up all the tags in the index.html
-    return bowerTags.defaultTags(appDirectory);
   })
   .then(() => {
     // Copy Fonts
