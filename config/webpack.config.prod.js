@@ -4,9 +4,6 @@ const config = require("../config");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const extractSASS = new ExtractTextPlugin("code/app.css");
-
-const autoprefixer = require("autoprefixer");
 const extractCSS = new ExtractTextPlugin("code/app.css");
 
 module.exports = {
@@ -55,7 +52,7 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true
       },
-      inject: false
+      inject: true
     }),
     extractCSS
   ],
@@ -111,7 +108,10 @@ module.exports = {
 
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-        loader: "file-loader?name=fonts/[name].[ext]"
+        loader: require.resolve("file-loader"),
+        options:{
+          name: "fonts/[name].[ext]"
+        }
       },
 
       {

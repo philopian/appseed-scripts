@@ -40,6 +40,9 @@ buildCmd
     }
   })
   .then(() => {
+    return buildCmd.removeDevBundleScript(config);
+  })
+  .then(() => {
     // User provided the "dojo" argument
     if (_.includes(argv, "--dojo")) {
       // Create dojoConfig file in the prod folder

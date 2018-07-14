@@ -11,15 +11,13 @@ const templates = require("./templates");
 const chmod = require("chmod");
 const openBrowser = require("react-dev-utils/openBrowser");
 
-
 function checkIfUndefined(item) {
   if (item == undefined) {
-    return ''
+    return "";
   } else {
-    return item
+    return item;
   }
 }
-
 
 module.exports = {
   makeFolderIfDoesntExist: folderName => {
@@ -38,15 +36,10 @@ module.exports = {
 
   createFileFromTemplate: (filename, templateStr) => {
     return new Promise((resolve, reject) => {
-      fs.writeFileSync(
-        filename,
-        templateStr,
-        "utf-8"
-      );
+      fs.writeFileSync(filename, templateStr, "utf-8");
       resolve();
-    })
+    });
   },
-
 
   buildWebpack: (config, buildType) => {
     buildType = checkIfUndefined(buildType);
@@ -57,7 +50,7 @@ module.exports = {
 
       // Check to see if use passed in the dojo flag
       let webpackConfig;
-      if (buildType == 'dojo') {
+      if (buildType == "dojo") {
         webpackConfig = require("../config/webpack.config.proddojo");
       } else {
         webpackConfig = require("../config/webpack.config.prod");
@@ -68,31 +61,40 @@ module.exports = {
           console.log(chalk.red(err));
           return 1;
         }
+        /**
+         *
+         * jsonStats keys
+         *
+         * errors/warnings/version/hash/time/builtAt/publicPath/outputPath
+         * assetsByChunkNames/assetsfilteredAssets/entrypoints/namedChunkGroups
+         * chunks/modules/filteredModules/children
+         *
+         */
         const jsonStats = stats.toJson();
-
         if (jsonStats.hasErrors) {
           return jsonStats.errors.map(error => console.log(chalk.red(error)));
         }
 
         if (jsonStats.hasWarnings) {
           console.log(
-            chalk.yellow("Webpack generated the following warnings: ")
+            chalk.yellow("[Webpack generated the following warnings: ]")
           );
-          jsonStats.warnings.map(warning => console.log(chalk.yellow(warning)));
+          jsonStats.warnings.map(warning =>
+            console.log(chalk.yellow([warning]))
+          );
         }
 
-        console.log(`Webpack stats: ${stats}`);
         console.log(
           chalk.blue(
-            `Your app has been built for production and written to ./${config
-              .fileNames.distRoot}`
+            `Your app has been built for production and written to ./${
+              config.fileNames.distRoot
+            }`
           )
         );
         resolve();
       });
     });
   },
-
 
   copyAssets: config => {
     return new Promise((resolve, reject) => {
@@ -145,15 +147,22 @@ module.exports = {
       /*********************************************
        * Create/update .env file
        *********************************************/
-      const dotEnvDestinationFile = path.join(config.paths.deployRoot, folderName, ".env");
+      const dotEnvDestinationFile = path.join(
+        config.paths.deployRoot,
+        folderName,
+        ".env"
+      );
       let dotEnvContents;
       if (copyEnvFile) {
         const dotEnvFile = path.join(config.paths.appRoot, ".env");
-        dotEnvContents = fs.readFileSync(dotEnvFile, 'utf8');
+        dotEnvContents = fs.readFileSync(dotEnvFile, "utf8");
 
         // Switch the development to production for the node environment
-        dotEnvContents = dotEnvContents.replace('NODE_ENV=development', 'NODE_ENV=production');
-        dotEnvContents = dotEnvContents.replace('PORT=9090', 'PORT=8080');
+        dotEnvContents = dotEnvContents.replace(
+          "NODE_ENV=development",
+          "NODE_ENV=production"
+        );
+        dotEnvContents = dotEnvContents.replace("PORT=9090", "PORT=8080");
       } else {
         dotEnvContents = `NODE_ENV=production
 PORT=8080
@@ -184,6 +193,26 @@ PORT=8080
         }
         console.log(chalk.blue("Created web.config file"));
         resolve();
+      });
+    });
+  },
+
+  removeDevBundleScript: config => {
+    return new Promise((resolve, reject) => {
+      const deployIndexHtml = path.join(
+        config.paths.deployRoot,
+        "www/index.html"
+      );
+
+      fs.readFile(deployIndexHtml, "utf8", function(err, data) {
+        if (err) {
+          console.log(err);
+          return resolve();
+        }
+        var result = data.replace('<script src="bundle.js"></script>', "");
+        fs.writeFile(deployIndexHtml, result, "utf8", err => {
+          resolve();
+        });
       });
     });
   },
@@ -259,26 +288,20 @@ PORT=8080
     });
   },
 
-
   createSPAWebConfig: config => {
-      // Generate Dockerfile files
-      return new Promise((resolve, reject) => {
-        // Generate SPA webconfig
-        const webconfigFilename = path.join(
-          config.paths.deployRoot,
-          "www",
-          "web.config"
-        );
-        const webconfigContents = templates.spaWebConfig();
-        fs.writeFileSync(
-          webconfigFilename,
-          webconfigContents,
-          "utf-8"
-        );
-        resolve();
-      });
-    },
-
+    // Generate Dockerfile files
+    return new Promise((resolve, reject) => {
+      // Generate SPA webconfig
+      const webconfigFilename = path.join(
+        config.paths.deployRoot,
+        "www",
+        "web.config"
+      );
+      const webconfigContents = templates.spaWebConfig();
+      fs.writeFileSync(webconfigFilename, webconfigContents, "utf-8");
+      resolve();
+    });
+  },
 
   createAnsibleFiles: config => {
     return new Promise((resolve, reject) => {
@@ -382,66 +405,48 @@ PORT=8080
     });
   },
 
-
-  printAzureInstuctions: (config) => {
+  printAzureInstuctions: config => {
     return new Promise((resolve, reject) => {
-      console.log(
-        "\n\n\n",
-        "******************************************************************************\n",
-        "\n",
-        "      Production build is complete! \n",
-        "      To run your application locally follow these commands:\n",
-        "      $ cd " + config.fileNames.distRoot + " \n",
-        "      $ node server \n",
-        "\n",
-        "      You can now view your website at http://localhost:" +
-        config.port +
-        "\n",
-        "\n",
-        "******************************************************************************\n\n\n"
-      );
+      console.log(chalk.blue(`
+******************************************************************************
+      Production build is complete!                                           
+      To run your application locally follow these commands:                  
+      $ cd ${config.fileNames.distRoot}                                       
+      $ node server                                                           
+      You can now view your website at http://localhost:${config.port}        
+******************************************************************************
+`));
       resolve();
     });
   },
 
-
-  printDockerInstuctions: (config) => {
+  printDockerInstuctions: config => {
     return new Promise((resolve, reject) => {
-      console.log(
-        "\n\n\n",
-        "******************************************************************************\n",
-        "\n",
-        "      Production build is complete! \n",
-        "      To run your application locally with docker, follow these commands:\n",
-        "      $ cd " + config.fileNames.distRoot + " \n",
-        "      $ ./up.sh \n",
-        "\n",
-        "      You can now view your website at http://localhost:80" + "\n",
-        "\n",
-        "******************************************************************************\n\n\n"
-      );
+      console.log(chalk.blue(`
+******************************************************************************
+      Production build is complete!
+      To run your application locally with docker, follow these commands:                  
+      $ cd ${config.fileNames.distRoot}                                      
+      $ ./up.sh
+      You can now view your website at http://localhost:80
+******************************************************************************
+`));
       resolve();
     });
   },
 
+  runServerAndBrowserLocally: config => {
+    console.log(chalk.blue(`
+******************************************************************************
+      Production build is complete!
+      Your application is running locally at: http://localhost:8080
 
-
-  runServerAndBrowserLocally: (config) => {
-    console.log(
-      "\n\n\n",
-      "******************************************************************************\n",
-      "\n",
-      "      Production build is complete! \n",
-      "      Your application is running locally at: http://localhost:8080\n",
-      "\n",
-      "      To quit the server press [ctlr]+[C] in the terminal" + "\n",
-      "\n",
-      "******************************************************************************\n\n\n"
-    );
+      To quit the server press [ctlr]+[C] in the terminal
+******************************************************************************
+`));
 
     // Open browser
     openBrowser(`http://localhost:${config.port}`);
-
 
     // Run local production server
     process.env.NODE_ENV = "production";
@@ -449,8 +454,4 @@ PORT=8080
     const cmd = `cd ${config.paths.deployRoot} && node server`;
     shell.exec(cmd);
   }
-
-
-
-
 };
