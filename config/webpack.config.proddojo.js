@@ -38,10 +38,9 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: ["node_modules", "bower_components"],
-    descriptionFiles: ["package.json", "bower.json"],
+    modules: ["node_modules"],
+    descriptionFiles: ["package.json"],
     alias: {
-      BowerComponents: path.resolve(config.paths.appRoot + "/bower_components"),
       NodeModules: path.resolve(config.paths.appRoot + "/node_modules"),
       AppRoot: path.resolve(config.paths.appRoot)
     }

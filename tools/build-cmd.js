@@ -93,56 +93,6 @@ module.exports = {
     });
   },
 
-  copyFonts: config => {
-    return new Promise((resolve, reject) => {
-      /*********************************************
-       * FontAwesome
-       *********************************************/
-      const fontAwesomeDir = path.join(
-        config.paths.bower,
-        "font-awesome/fonts"
-      );
-      const fontAwesomeBuildDir = path.join(
-        config.paths.deployWwwRoot,
-        "fonts"
-      );
-
-      if (fs.existsSync(path.join(fontAwesomeDir, "fontawesome-webfont.ttf"))) {
-        fsExtra.copy(fontAwesomeDir, fontAwesomeBuildDir, err => {
-          if (err) return console.error(err);
-          console.log(chalk.blue("FontAwesome fonts copied to DEPLOY"));
-          resolve();
-        });
-      } else {
-        resolve();
-      }
-    });
-  },
-
-  copyLeafletImages: config => {
-    return new Promise((resolve, reject) => {
-      /*********************************************
-       * Leaflet
-       *********************************************/
-      const leafletAssets = path.join(
-        config.paths.bower,
-        "leaflet/dist/images"
-      );
-      const leafletAssetsDist = path.join(
-        config.paths.deployWwwRoot,
-        "code/images"
-      );
-      if (fs.existsSync(path.join(leafletAssets, "marker-icon.png"))) {
-        fsExtra.copy(leafletAssets, leafletAssetsDist, err => {
-          if (err) return console.error(err);
-          console.log(chalk.blue("Leaflet assets copied to DEPLOY"));
-          resolve();
-        });
-      } else {
-        resolve();
-      }
-    });
-  },
 
   copyAssets: config => {
     return new Promise((resolve, reject) => {

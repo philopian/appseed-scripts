@@ -18,19 +18,10 @@ const config = require(path.join(appDirectory, "appseed.config.js"));
 
 
 /**
- * Install bower and npm/yarn dependencies
+ * Install npm/yarn dependencies
  */
-const cmdInstall = `cd ${appDirectory}  && bower install && ${yarnOrNpm()} install`;
+const cmdInstall = `cd ${appDirectory} && ${yarnOrNpm()} install`;
 shell.exec(cmdInstall)
-
-
-
-/**
- * Add bower css tags into the ./www/index.html (for development add them via html tags)
- */
-const bowerTags = require("../tools/bower-tags");
-bowerTags.injectTagsIntoHtml(appDirectory);
-bowerTags.watch(appDirectory); // Watch the bower.json file for changes and update the css tags
 
 
 

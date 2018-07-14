@@ -14,6 +14,5 @@ module.exports = {
     webRoot: path.join(ROOT, "./www"),
     deployRoot: path.join(ROOT, DEPLOY),
     deployWwwRoot: path.join(ROOT, DEPLOY, 'www'),
-    // bower: path.join(ROOT, "./bower_components")
   }
 };

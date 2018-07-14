@@ -57,14 +57,6 @@ buildCmd
     }
   })
   .then(() => {
-    // Copy Fonts
-    return buildCmd.copyFonts(config);
-  })
-  .then(() => {
-    // Copy Leaflet Images
-    return buildCmd.copyLeafletImages(config);
-  })
-  .then(() => {
     // Copy Assets
     return buildCmd.copyAssets(config);
   })
