@@ -12,10 +12,10 @@ working directory: ${appDirectory}
 `)
 const config = require(path.join(appDirectory, "appseed.config.js"));
 
-const buildCmd = require("../tools/build-cmd");
-const templates = require("../tools/templates");
-const buildAzure = require("../tools/build-azure-node");
-const buildDocker = require("../tools/build-docker");
+const buildCmd = require(path.join(__dirname,"../tools/build-cmd"));
+const templates = require(path.join(__dirname,"../tools/templates"));
+const buildAzure = require(path.join(__dirname,"../tools/build-azure-node"));
+const buildDocker = require(path.join(__dirname,"../tools/build-docker"));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //--Generate frontend files------

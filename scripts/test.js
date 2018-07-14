@@ -17,7 +17,7 @@ const config = require(path.join(appDirectory, "appseed.config.js"));
 
 // Run Jest on the application files (./www/*)
 const jest = require("jest");
-let jestConfig = require("../config/jest/config");
+let jestConfig = require(path.join(__dirname,"../config/jest/config"));
 jestConfig.roots = [appDirectory];
 const jestCommand = [
   "--env=jsdom",

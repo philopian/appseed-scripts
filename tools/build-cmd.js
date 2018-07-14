@@ -7,7 +7,7 @@ const shell = require("shelljs");
 const rimraf = require("rimraf");
 const ora = require("ora");
 const webpack = require("webpack");
-const templates = require("./templates");
+const templates = require(path.join(__dirname,"./templates"));
 const chmod = require("chmod");
 const openBrowser = require("react-dev-utils/openBrowser");
 
@@ -51,9 +51,9 @@ module.exports = {
       // Check to see if use passed in the dojo flag
       let webpackConfig;
       if (buildType == "dojo") {
-        webpackConfig = require("../config/webpack.config.proddojo");
+        webpackConfig = require(path.join(__dirname, "../config/webpack.config.proddojo"));
       } else {
-        webpackConfig = require("../config/webpack.config.prod");
+        webpackConfig = require(path.join(__dirname, "../config/webpack.config.prod"));
       }
       webpack(webpackConfig).run((err, stats) => {
         spinner.stop();

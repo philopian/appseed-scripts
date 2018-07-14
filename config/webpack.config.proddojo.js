@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "production";
 const path = require("path");
 const webpack = require("webpack");
-const config = require("../config");
+const config = require(path.join(__dirname, "../config"));
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');

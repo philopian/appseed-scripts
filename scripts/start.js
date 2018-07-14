@@ -34,9 +34,9 @@ const WebpackDevServer = require("webpack-dev-server");
 // User provided the "--dojo" argument
 let webpackConfig;
 if (_.includes(argv, "--dojo")) {
-  webpackConfig = require("../config/webpack.config.dojo.js");
+  webpackConfig = require(path.join(__dirname,"../config/webpack.config.dojo.js"));
 } else {
-  webpackConfig = require("../config/webpack.config.dev.js");
+  webpackConfig = require(path.join(__dirname,"../config/webpack.config.dev.js"));
 }
 const openBrowser = require("react-dev-utils/openBrowser");
 const compiler = Webpack(webpackConfig);

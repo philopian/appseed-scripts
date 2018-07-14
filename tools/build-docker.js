@@ -2,7 +2,7 @@ const path = require("path");
 const chalk = require("chalk");
 const _ = require("lodash");
 
-const buildCmd = require("../tools/build-cmd");
+const buildCmd = require(path.join(__dirname,"../tools/build-cmd"));
 
 module.exports = {
   build: function BuildDocker(config, argv) {

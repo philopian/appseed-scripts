@@ -6,9 +6,9 @@ const shell = require("shelljs");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const config = require(path.join(appDirectory, "appseed.config.js"));
-const newComponent = require("../tools/new-component");
-const newContainer = require("../tools/new-container");
-const newReducer = require("../tools/new-reducer");
+const newComponent = require(path.join(__dirname,"../tools/new-component"));
+const newContainer = require(path.join(__dirname,"../tools/new-container"));
+const newReducer = require(path.join(__dirname,"../tools/new-reducer"));
 
 // console.log(
 //   "",
