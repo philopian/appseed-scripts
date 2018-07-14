@@ -7,6 +7,9 @@ const rimraf = require("rimraf");
 const _ = require("lodash");
 
 const appDirectory = fs.realpathSync(process.cwd());
+console.log(`
+working directory: ${appDirectory}
+`)
 const config = require(path.join(appDirectory, "appseed.config.js"));
 
 const buildCmd = require("../tools/build-cmd");
