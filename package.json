@@ -1,6 +1,6 @@
 {
   "name": "appseed-scripts",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "tooling for AppSeed",
   "main": "index.js",
   "scripts": {
@@ -43,11 +43,8 @@
     "babel-runtime": "6.26.0",
     "chalk": "2.4.1",
     "chmod": "0.2.1",
-    "chokidar": "2.0.4",
-    "concat-files": "0.1.1",
     "cross-env": "5.2.0",
     "css-loader": "1.0.0",
-    "cssnano": "4.0.0",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "eslint": "5.1.0",
@@ -59,7 +56,6 @@
     "inquirer": "6.0.0",
     "jest": "^23.2.0",
     "lodash": "4.17.5",
-    "main-bower-files": "2.13.1",
     "node-fs-extra": "0.8.2",
     "node-sass": "4.9.2",
     "nodemon": "1.18.0",
