@@ -81,7 +81,7 @@ module.exports = {
           jsonStats.warnings.map(warning => console.log(chalk.yellow(warning)));
         }
 
-        console.log(`Webpack stats: ${stats}`);
+        // console.log(`Webpack stats: ${stats}`);
         console.log(
           chalk.blue(
             `Your app has been built for production and written to ./${config
@@ -92,6 +92,27 @@ module.exports = {
       });
     });
   },
+
+  removeDevBundleScript: config => {
+    return new Promise((resolve, reject) => {
+      const deployIndexHtml = path.join(
+        config.paths.deployRoot,
+        "www/index.html"
+      );
+
+      fs.readFile(deployIndexHtml, "utf8", function(err, data) {
+        if (err) {
+          console.log(err);
+          return resolve();
+        }
+        var result = data.replace('<script src="bundle.js"></script>', "");
+        fs.writeFile(deployIndexHtml, result, "utf8", err => {
+          resolve();
+        });
+      });
+    });
+  },
+
 
   copyFonts: config => {
     return new Promise((resolve, reject) => {
