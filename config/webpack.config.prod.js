@@ -3,8 +3,7 @@ const path = require("path");
 const config = require(path.join(__dirname, "../config"));
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const extractCSS = new ExtractTextPlugin("code/app.css");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "production",
@@ -28,7 +27,7 @@ module.exports = {
   devtool: "source-map",
   target: "web",
   node: {
-    fs: 'empty'
+    fs: "empty"
   },
 
   // PLUGINS
@@ -38,6 +37,10 @@ module.exports = {
         NODE_ENV: JSON.stringify("production")
       }
     }),
+    new MiniCssExtractPlugin({
+      filename: "code/app.css"
+    }),
+
     new HtmlWebpackPlugin({
       template: "www/index.html",
       minify: {
@@ -54,13 +57,11 @@ module.exports = {
       },
       inject: true
     }),
-    extractCSS
   ],
 
   // LOADERS
   module: {
     rules: [
-      //
       {
         test: /\.html$/,
         use: [
@@ -85,31 +86,16 @@ module.exports = {
       },
       {
         test: /\.(css|scss)$/,
-        // include: config.paths.appRoot,
-        loader: extractCSS.extract(
-          Object.assign({
-            fallback: require.resolve("style-loader"),
-            use: [
-              {
-                loader: require.resolve("css-loader"),
-                options: {
-                  importLoaders: 1,
-                  minimize: true,
-                  sourceMap: true
-                }
-              },
-              {
-                loader: require.resolve("sass-loader")
-              }
-            ]
-          })
-        )
+        use: [
+          MiniCssExtractPlugin.loader,
+          require.resolve('css-loader'),
+          require.resolve('sass-loader')
+        ],
       },
-
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: require.resolve("file-loader"),
-        options:{
+        options: {
           name: "fonts/[name].[ext]"
         }
       },
